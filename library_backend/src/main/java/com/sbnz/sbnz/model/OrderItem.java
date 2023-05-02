@@ -2,11 +2,15 @@ package com.sbnz.sbnz.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Setter
+@Getter
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

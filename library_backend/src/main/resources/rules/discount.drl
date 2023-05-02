@@ -1,0 +1,55 @@
+package rules;
+import com.sbnz.sbnz.model.*;
+
+rule "Discount for order item with quantity 2 or more"
+when
+    $item: OrderItem(quantity >= 2)
+then
+    $item.setDiscount(0.1);
+end
+
+rule "Discount for order item with total price over 3000"
+when
+    $item: OrderItem(price > 3000)
+then
+    $item.setDiscount(0.05);
+end
+
+rule "Discount for order item with total price over 2000 and book genre is education"
+when
+    $item: OrderItem(price > 2000)
+then
+    $item.setDiscount(0.07);
+end
+
+rule "Discount for order with 3 or more order items"
+when
+    $order: Order($itemCount: orderItems.size() >= 3)
+then
+    $order.setDiscount(0.1);
+end
+
+rule "Discount for order with 5 or more order items"
+when
+    $order: Order(orderItems.size() >= 5)
+then
+    $order.setDiscount(0.1);
+end
+
+rule "Calculate price for order item"
+when
+    $item: OrderItem($book: book, $quantity: quantity)
+then
+    double itemPrice = $book.getPrice() * $quantity;
+    $item.setPrice(itemPrice);
+end
+
+rule "Calculate total price for order"
+when
+    $order: Order($items: orderItems)
+then
+    //double totalPrice = $items.stream().mapToDouble(OrderItem::getPrice).sum();
+    $order.setPrice(0);
+end
+
+

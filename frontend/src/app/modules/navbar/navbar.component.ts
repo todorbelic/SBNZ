@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from "@angular/router";
-import {UserToken} from "../bookstore/model/user-token.model";
-import {TokenStorageService} from "../bookstore/services/token-storage.service";
+import { Router } from "@angular/router";
+import { UserToken } from "../bookstore/model/user-token.model";
+import { TokenStorageService } from "../bookstore/services/token-storage.service";
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +14,7 @@ export class NavbarComponent implements OnInit {
   role: any;
   isLoggedIn: boolean = false;
 
-  constructor(private tokenStorageService: TokenStorageService,  private router: Router) {
+  constructor(private tokenStorageService: TokenStorageService, private router: Router) {
     this.user = this.tokenStorageService.getUser()
     this.isLoggedIn = this.tokenStorageService.isLoggedIn()
   }
@@ -24,7 +24,7 @@ export class NavbarComponent implements OnInit {
 
   signOut() {
     this.tokenStorageService.signOut()
-    this.router.navigate(['']).then(()=>{
+    this.router.navigate(['']).then(() => {
       window.location.reload();
     })
   }
@@ -35,6 +35,10 @@ export class NavbarComponent implements OnInit {
 
   routeToSignIn(): void {
     this.router.navigate(['/sign-in']);
+  }
+
+  routeToCart(): void {
+    this.router.navigate(['/cart']);
   }
 
 }

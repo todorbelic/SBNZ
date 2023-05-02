@@ -1,68 +1,17 @@
-<div>
-<div class="wrapper" *ngFor="let b of books">
-  <mat-card class="mat-card">
-    <mat-card-header class="mat-card-header">
-      <mat-card-title>
-        {{b.name}}
-      </mat-card-title>
-      <mat-card-subtitle>
-        {{b.authorFirstName}}  {{b.authorLastName}}
-      </mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content class="mat-card-content">
-      <p>Genre: {{b.genre}}</p>
-      <p>Price: {{b.price}}e</p>
-    </mat-card-content>
-  </mat-card>
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        {{b.name}}
-      </mat-card-title>
-    </mat-card-header>
-  </mat-card>
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        {{b.name}}
-      </mat-card-title>
-    </mat-card-header>
-  </mat-card>
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        {{b.name}}
-      </mat-card-title>
-    </mat-card-header>
-  </mat-card>
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        {{b.name}}
-      </mat-card-title>
-    </mat-card-header>
-  </mat-card>
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        {{b.name}}
-      </mat-card-title>
-    </mat-card-header>
-  </mat-card>
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        {{b.name}}
-      </mat-card-title>
-    </mat-card-header>
-  </mat-card>
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        {{b.name}}
-      </mat-card-title>
-    </mat-card-header>
-  </mat-card>
-</div>
-
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 mb-4" *ngFor="let b of books">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">{{b.name}}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">{{b.authorFirstName}} {{b.authorLastName}}</h6>
+          <p class="card-text">Genre: {{b.genre}}</p>
+          <p class="card-text">Price: {{b.price}}€</p>
+        </div>
+        <div class="card-footer" *ngIf="isLoggedIn">
+          <button class="btn btn-primary" (click)="addToCart(b)">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

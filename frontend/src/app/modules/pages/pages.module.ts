@@ -4,9 +4,10 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
 import { HomeComponent } from './home/home.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { SignInComponent } from './sign-in/sign-in.component';
-import {ReactiveFormsModule} from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
 import { BooksComponent } from './books/books.component';
-import {MaterialModule} from "../../material/material.module";
+import { MaterialModule } from "../../material/material.module";
+import { CartComponent } from './cart/cart.component';
 
 @NgModule({
   declarations: [
@@ -14,12 +15,13 @@ import {MaterialModule} from "../../material/material.module";
     SignUpComponent,
     SignInComponent,
     BooksComponent,
+    CartComponent
   ],
-    imports: [
-        CommonModule,
-        AppRoutingModule,
-        ReactiveFormsModule,
-        MaterialModule,
-    ]
+  imports: [
+    CommonModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    MaterialModule,
+  ]
 })
 export class PagesModule { }

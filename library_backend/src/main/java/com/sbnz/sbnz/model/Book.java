@@ -2,11 +2,13 @@ package com.sbnz.sbnz.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Getter
 public class Book {
 
     @Id

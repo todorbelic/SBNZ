@@ -1,5 +1,6 @@
 package com.sbnz.sbnz.model;
 
+import com.sbnz.sbnz.enums.Genre;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

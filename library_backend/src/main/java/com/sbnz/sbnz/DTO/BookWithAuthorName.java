@@ -1,7 +1,7 @@
 package com.sbnz.sbnz.DTO;
 
 import com.sbnz.sbnz.model.Book;
-import com.sbnz.sbnz.model.Genre;
+import com.sbnz.sbnz.enums.Genre;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

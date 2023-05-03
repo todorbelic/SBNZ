@@ -1,0 +1,46 @@
+<div class="container">
+    <h1 class="mb-4">Shopping Cart</h1>
+    <div *ngIf="cartItems.length === 0" class="alert alert-info">
+        Your cart is empty.
+    </div>
+    <div *ngIf="cartItems.length > 0">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of cartItems">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.price }}€</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.price * item.quantity }}€</td>
+                    <td><button class="btn btn-danger" (click)="removeFromCart(item)">Remove</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="total">
+            <p class="h4">Total: {{ getTotal() }}€</p>
+            <p class="h5">Choose a payment method:</p>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="paymentMethod" id="card" value="card" checked>
+                <label class="form-check-label" for="card">
+                    <i class="far fa-credit-card"></i> Credit/Debit Card
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="paymentMethod" id="cash" value="cash">
+                <label class="form-check-label" for="cash">
+                    <i class="fas fa-money-bill-wave"></i> Cash on Delivery
+                </label>
+            </div>
+            <button class="btn btn-primary mt-3" (click)="checkout()">Checkout</button>
+        </div>
+
+    </div>
+</div>

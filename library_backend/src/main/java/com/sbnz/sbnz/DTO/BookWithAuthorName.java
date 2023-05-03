@@ -25,7 +25,7 @@ public class BookWithAuthorName {
         this.genre = book.getGenre();
         this.name = book.getName();
         this.authorFirstName = book.getAuthor().getFirstName();
-        this.authorLastName = book.getAuthor().getFirstName();
+        this.authorLastName = book.getAuthor().getLastName();
         this.price = book.getPrice();
     }
 }

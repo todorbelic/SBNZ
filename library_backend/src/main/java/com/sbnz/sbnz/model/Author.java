@@ -1,8 +1,6 @@
 package com.sbnz.sbnz.model;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -10,6 +8,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Getter
+@Setter
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

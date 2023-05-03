@@ -1,39 +1,48 @@
 package rules;
 import com.sbnz.sbnz.model.*;
 
+rule "Insert Order Items"
+when
+    $order: Order()
+then
+    for(OrderItem item : $order.getOrderItems()) {
+        insert(item);
+    }
+end
+
 rule "Discount for order item with quantity 2 or more"
 when
     $item: OrderItem(quantity >= 2)
 then
-    $item.setDiscount(0.1);
+    $item.setDiscount(Math.max(0.1, $item.getDiscount()));
 end
 
 rule "Discount for order item with total price over 3000"
 when
     $item: OrderItem(price > 3000)
 then
-    $item.setDiscount(0.05);
+    $item.setDiscount(Math.max(0.05, $item.getDiscount()));
 end
 
 rule "Discount for order item with total price over 2000 and book genre is education"
 when
-    $item: OrderItem(price > 2000)
+    $item: OrderItem(price > 2000, book.genre == Genre.EDUCATION)
 then
-    $item.setDiscount(0.07);
+    $item.setDiscount(Math.max(0.07, $item.getDiscount()));
 end
 
 rule "Discount for order with 3 or more order items"
 when
     $order: Order($itemCount: orderItems.size() >= 3)
 then
-    $order.setDiscount(0.1);
+    $order.setDiscount(Math.max(0.1, $order.getDiscount()));
 end
 
 rule "Discount for order with 5 or more order items"
 when
     $order: Order(orderItems.size() >= 5)
 then
-    $order.setDiscount(0.1);
+    $order.setDiscount(Math.max(0.15, $order.getDiscount()));
 end
 
 rule "Calculate price for order item"
@@ -44,12 +53,64 @@ then
     $item.setPrice(itemPrice);
 end
 
-rule "Calculate total price for order"
+rule "Calculate total price without discount for order"
 when
     $order: Order($items: orderItems)
+    Number($totalPriceWithoutDiscount: doubleValue) from accumulate(
+            OrderItem(
+                $price: price
+            ) from $items,
+            init(double totalPrice = 0;),
+            action(totalPrice += $price;)
+            result(totalPrice)
+    )
 then
-    //double totalPrice = $items.stream().mapToDouble(OrderItem::getPrice).sum();
-    $order.setPrice(0);
+    $order.setPrice($totalPriceWithoutDiscount);
 end
+
+rule "Calculate total price with items discount"
+when
+    $order: Order($items: orderItems, $price: price, $discount: discount)
+    $item : OrderItem() from $items
+    Number($totalPriceWithItemDiscount: doubleValue) from accumulate(
+        OrderItem(
+            $itemPrice: price,
+            $itemDiscount: discount
+        ) from $items,
+        init(double totalPrice = 0;),
+        action(totalPrice += ($itemPrice - ($itemPrice * $itemDiscount));)
+        result(totalPrice)
+    )
+    eval(($price - ($price * $discount)) > $totalPriceWithItemDiscount)
+then
+    modify($item) {
+        setPrice($item.getPrice() * (1 - $item.getDiscount()))
+    }
+    $order.setPrice($totalPriceWithItemDiscount);
+    $order.setDiscount(0.0);
+end
+
+rule "Calculate total price with order discount"
+when
+    $order: Order($items: orderItems, $price: price, $discount: discount)
+    $item : OrderItem() from $items
+    Number($totalPriceWithItemDiscount: doubleValue) from accumulate(
+        OrderItem(
+            $itemPrice: price,
+            $itemDiscount: discount
+        ) from $items,
+        init(double totalPrice = 0;),
+        action(totalPrice += ($itemPrice - ($itemPrice * $itemDiscount));)
+        result(totalPrice)
+    )
+    eval((($price - ($price * $discount)) <= $totalPriceWithItemDiscount) && $discount != 0.0)
+
+then
+    modify($item) {
+        setDiscount(0.0)
+    }
+    $order.setPrice($price - ($price * $discount));
+end
+
 
 

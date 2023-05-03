@@ -5,6 +5,7 @@ export class BookWithAuthorsModel {
   price: number = 0;
   authorFirstName: string = '';
   authorLastName: string = '';
+  quantity: number = 0;
 
   public constructor(obj?: any) {
     if (obj) {
@@ -14,6 +15,7 @@ export class BookWithAuthorsModel {
       this.price = obj.price;
       this.authorFirstName = obj.authorFirstName;
       this.authorLastName = obj.authorLastName;
+      this.quantity = obj.quantity;
     }
   }
 }

@@ -1,5 +1,6 @@
 package rules;
 import com.sbnz.sbnz.model.*;
+import com.sbnz.sbnz.enums.Genre;
 
 rule "Insert Order Items"
 when
@@ -8,6 +9,24 @@ then
     for(OrderItem item : $order.getOrderItems()) {
         insert(item);
     }
+    System.out.println(1);
+end
+
+rule "Calculate price for order item"
+when
+    $item: OrderItem($book: book, $quantity: quantity, $price: price)
+then
+    double itemPrice = $book.getPrice() * $quantity;
+    $item.setPrice(itemPrice);
+end
+
+rule "Discount for order item with total price over 3000"
+when
+    $item: OrderItem()
+    eval($item.getPrice() > 3000)
+then
+    $item.setDiscount(Math.max(0.1, $item.getDiscount()));
+    System.out.println(4);
 end
 
 rule "Discount for order item with quantity 2 or more"
@@ -17,18 +36,13 @@ then
     $item.setDiscount(Math.max(0.1, $item.getDiscount()));
 end
 
-rule "Discount for order item with total price over 3000"
-when
-    $item: OrderItem(price > 3000)
-then
-    $item.setDiscount(Math.max(0.05, $item.getDiscount()));
-end
 
 rule "Discount for order item with total price over 2000 and book genre is education"
 when
     $item: OrderItem(price > 2000, book.genre == Genre.EDUCATION)
 then
     $item.setDiscount(Math.max(0.07, $item.getDiscount()));
+    System.out.println(5);
 end
 
 rule "Discount for order with 3 or more order items"
@@ -36,6 +50,7 @@ when
     $order: Order($itemCount: orderItems.size() >= 3)
 then
     $order.setDiscount(Math.max(0.1, $order.getDiscount()));
+    System.out.println(6);
 end
 
 rule "Discount for order with 5 or more order items"
@@ -43,14 +58,7 @@ when
     $order: Order(orderItems.size() >= 5)
 then
     $order.setDiscount(Math.max(0.15, $order.getDiscount()));
-end
-
-rule "Calculate price for order item"
-when
-    $item: OrderItem($book: book, $quantity: quantity)
-then
-    double itemPrice = $book.getPrice() * $quantity;
-    $item.setPrice(itemPrice);
+    System.out.println(7);
 end
 
 rule "Calculate total price without discount for order"
@@ -66,12 +74,12 @@ when
     )
 then
     $order.setPrice($totalPriceWithoutDiscount);
+    System.out.println(8);
 end
 
 rule "Calculate total price with items discount"
 when
     $order: Order($items: orderItems, $price: price, $discount: discount)
-    $item : OrderItem() from $items
     Number($totalPriceWithItemDiscount: doubleValue) from accumulate(
         OrderItem(
             $itemPrice: price,
@@ -83,17 +91,15 @@ when
     )
     eval(($price - ($price * $discount)) > $totalPriceWithItemDiscount)
 then
-    modify($item) {
-        setPrice($item.getPrice() * (1 - $item.getDiscount()))
-    }
+    $order.getOrderItems().forEach(item -> item.setPrice(item.getPrice() * (1 - item.getDiscount())));
     $order.setPrice($totalPriceWithItemDiscount);
     $order.setDiscount(0.0);
+    System.out.println(9);
 end
 
 rule "Calculate total price with order discount"
 when
     $order: Order($items: orderItems, $price: price, $discount: discount)
-    $item : OrderItem() from $items
     Number($totalPriceWithItemDiscount: doubleValue) from accumulate(
         OrderItem(
             $itemPrice: price,
@@ -103,13 +109,12 @@ when
         action(totalPrice += ($itemPrice - ($itemPrice * $itemDiscount));)
         result(totalPrice)
     )
-    eval((($price - ($price * $discount)) <= $totalPriceWithItemDiscount) && $discount != 0.0)
+    eval((($price * (1 - $discount)) <= $totalPriceWithItemDiscount) && $discount != 0.0)
 
 then
-    modify($item) {
-        setDiscount(0.0)
-    }
-    $order.setPrice($price - ($price * $discount));
+    $order.getOrderItems().forEach(item -> item.setDiscount(0.0));
+    $order.setPrice($price * (1 - $discount));
+    System.out.println($order.getPrice());
 end
 
 

@@ -23,7 +23,6 @@ public class OrderItem {
     private double price;
     @Column
     private double discount;
-
     @ManyToOne
     private Order order;
 }

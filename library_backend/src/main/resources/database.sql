@@ -8,8 +8,8 @@ INSERT INTO author (first_name, last_name)
 VALUES ('F. Scott', 'Fitzgerald');
 INSERT INTO author (first_name, last_name)
 VALUES ('Jane', 'Austen');
-INSERT INTO author (first_name, last_name, books)
-VALUES ('J.K.', 'Rowling', '{1,2,3}');
+/*INSERT INTO author (first_name, last_name, books)
+VALUES ('J.K.', 'Rowling', '{1,2,3}');*/
 
 INSERT INTO book (name, author_id, genre, price)
 VALUES ('To Kill a Mockingbird', 1, 1, 15.99);

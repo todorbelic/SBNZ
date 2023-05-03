@@ -5,10 +5,8 @@ import com.sbnz.sbnz.model.Book;
 import com.sbnz.sbnz.service.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,5 +31,16 @@ private final BookService bookService;
             booksDTO.add(new BookWithAuthorName(b));
         }
         return new ResponseEntity<>(booksDTO, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/addBook")
+    public ResponseEntity<BookWithAuthorName> addBook(@RequestBody BookWithAuthorName bookDTO){
+        Book newBook = bookService.addBook(bookDTO);
+        if(newBook == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        BookWithAuthorName book = new BookWithAuthorName(newBook);
+        return new ResponseEntity<>(book, HttpStatus.CREATED);
     }
 }

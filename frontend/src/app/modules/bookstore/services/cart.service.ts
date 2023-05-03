@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BookWithAuthorsModel } from '../dto/book-with-authors.model';
 import { TokenStorageService } from './token-storage.service';
+import { UserCart } from '../dto/user-cart.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,21 +15,13 @@ export class CartService {
   constructor(private http: HttpClient, private tokenStorageService: TokenStorageService) { }
 
   calculateTotalWithDiscount(cartItems: BookWithAuthorsModel[]) {
-    let total = 0;
-    cartItems.forEach((item: any) => {
-      total += item.price * item.quantity;
+    this.http.post(this.baseUrl + '/total-price-with-discount', cartItems, { headers: this.headers }).subscribe(res => {
+      return res;
     });
-    return total;
-
-    // TODO: Integrate with backend
-    // return this.http.get(this.baseUrl + '/total-price-with-discount', { headers: this.headers });
   }
 
-  checkout(cartItems: BookWithAuthorsModel[]) {
-    // send cartItems and user info to backend
-    const user = this.tokenStorageService.getUser();
-
-    this.http.post(this.baseUrl + '/checkout', { "cartItems": cartItems, "user": user }, { headers: this.headers }).subscribe(res => {
+  checkout(userCart: UserCart) {
+    this.http.post(this.baseUrl + '/checkout', userCart, { headers: this.headers }).subscribe(res => {
       console.log(res);
     });
   }

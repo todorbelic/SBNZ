@@ -7,6 +7,10 @@ import { MaterialModule } from "./material/material.module";
 import { PagesModule } from "./modules/pages/pages.module";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavbarComponent } from './modules/navbar/navbar.component';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from "@angular/common";
+
+
 
 @NgModule({
   declarations: [
@@ -20,6 +24,8 @@ import { NavbarComponent } from './modules/navbar/navbar.component';
     HttpClientModule,
     MaterialModule,
     PagesModule,
+    FormsModule,
+    CommonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

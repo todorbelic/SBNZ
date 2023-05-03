@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CartService } from "../../bookstore/services/cart.service";
+import { FormsModule } from '@angular/forms';
 
 import "bootstrap"
+import { Address } from '../../bookstore/dto/adress.model';
+import { UserCart } from '../../bookstore/dto/user-cart.model';
+import { TokenStorageService } from '../../bookstore/services/token-storage.service';
 
 @Component({
   selector: 'app-cart',
@@ -11,9 +15,12 @@ import "bootstrap"
 export class CartComponent implements OnInit {
 
   cartItems: any[] = [];
+  address: Address;
+  isCard: boolean = false;
 
-
-  constructor(public cartService: CartService) { }
+  constructor(public cartService: CartService, private tokenStorageService: TokenStorageService) {
+    this.address = new Address();
+  }
 
   ngOnInit(): void {
     this.getCartItems();
@@ -43,13 +50,14 @@ export class CartComponent implements OnInit {
 
   checkout(): void {
     alert('Checkout successful');
-    this.cartService.checkout(this.cartItems);
+    const user = this.tokenStorageService.getUser();
+    const userCart = new UserCart(user, this.cartItems, this.address, this.getTotal(), this.isCard);
+
+    this.cartService.checkout(userCart)
     this.clearCart();
   }
 
-  getTotal(): number {
-    const total = this.cartService.calculateTotalWithDiscount(this.cartItems);
-
-    return Math.round(total * 100) / 100;;
+  getTotal(): any {
+    return this.cartService.calculateTotalWithDiscount(this.cartItems)
   }
 }

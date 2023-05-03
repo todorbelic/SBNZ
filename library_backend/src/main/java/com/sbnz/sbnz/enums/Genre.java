@@ -4,5 +4,6 @@ public enum Genre {
     CLASSIC,
     DYSTOPIAN,
     FANTASY,
-    ROMANCE
+    ROMANCE,
+    EDUCATION
 }

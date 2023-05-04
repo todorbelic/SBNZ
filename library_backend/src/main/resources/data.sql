@@ -12,15 +12,17 @@ VALUES ('Jane', 'Austen');
 VALUES ('J.K.', 'Rowling', '{1,2,3}');*/
 
 INSERT INTO book (name, author_id, genre, price)
-VALUES ('To Kill a Mockingbird', 1, 1, 15.99);
+VALUES ('To Kill a Mockingbird', 1, 1, 2000.00);
 INSERT INTO book (name, author_id, genre, price)
-VALUES ('1984', 2, 2, 12.99);
+VALUES ('1984', 2, 2, 3500);
 INSERT INTO book (name, author_id, genre, price)
-VALUES ('The Lord of the Rings', 3, 3, 29.99);
+VALUES ('The Lord of the Rings', 3, 3, 1000);
 INSERT INTO book (name, author_id, genre, price)
-VALUES ('The Great Gatsby', 4, 1, 10.99);
+VALUES ('The Great Gatsby', 4, 1, 500);
 INSERT INTO book (name, author_id, genre, price)
-VALUES ('Pride and Prejudice', 5, 3, 7.99);
+VALUES ('Pride and Prejudice', 5, 0, 700);
+INSERT INTO book (name, author_id, genre, price)
+VALUES ('Algebra', 5, 4, 8000);
 
 
 

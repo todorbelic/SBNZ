@@ -11,21 +11,24 @@
                     <th>Price</th>
                     <th>Quantity</th>
                     <th>Total</th>
+                    <th>Discount</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let item of cartItems">
                     <td>{{ item.name }}</td>
-                    <td>{{ item.price }}€</td>
+                    <td>{{ item.price }} RSD</td>
                     <td>{{ item.quantity }}</td>
-                    <td>{{ item.price * item.quantity }}€</td>
+                    <td>{{ getRounded(item.total) }} RSD</td>
+                    <td>{{ getRounded(item.discount * 100)}}%</td>
                     <td><button class="btn btn-danger" (click)="removeFromCart(item)">Remove</button></td>
                 </tr>
             </tbody>
         </table>
         <div class="total">
-            <p class="h4">Total: {{ getTotal() }}€</p>
+            <p class="h4">Total: {{orderProcessed.totalPrice}} RSD</p>
+            <p class="h4">Discount: {{orderProcessed.discount * 100}}%</p>
             <p class="h5">Choose a payment method:</p>
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="paymentMethod" id="card" value="card"
@@ -46,13 +49,18 @@
             <h5 class="mt-3">Enter your address:</h5>
             <form>
                 <div class="form-group">
+                    <label for="city">City:</label>
+                    <input type="text" [(ngModel)]="address.city" class="form-control" id="city" name="city" required>
+                </div>
+                <div class="form-group">
                     <label for="street">Street:</label>
                     <input type="text" [(ngModel)]="address.street" class="form-control" id="street" name="street"
                         required>
                 </div>
                 <div class="form-group">
-                    <label for="city">City:</label>
-                    <input type="text" [(ngModel)]="address.city" class="form-control" id="city" name="city" required>
+                    <label for="number">Number:</label>
+                    <input type="text" [(ngModel)]="address.number" class="form-control" id="number" name="number"
+                        required>
                 </div>
             </form>
         </div>

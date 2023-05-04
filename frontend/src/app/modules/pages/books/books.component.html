@@ -6,7 +6,7 @@
           <h5 class="card-title">{{b.name}}</h5>
           <h6 class="card-subtitle mb-2 text-muted">{{b.authorFirstName}} {{b.authorLastName}}</h6>
           <p class="card-text">Genre: {{b.genre}}</p>
-          <p class="card-text">Price: {{b.price}}€</p>
+          <p class="card-text">Price: {{b.price}} RSD</p>
         </div>
         <div class="card-footer" *ngIf="isLoggedIn">
           <button class="btn btn-primary" (click)="addToCart(b)">Add to Cart</button>

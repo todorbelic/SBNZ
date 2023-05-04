@@ -65,9 +65,19 @@
 			<version>8.34.0.Final</version>
 		</dependency>
 		<dependency>
+			<groupId>org.drools</groupId>
+			<artifactId>drools-compiler</artifactId>
+			<version>8.34.0.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.drools</groupId>
+			<artifactId>drools-mvel</artifactId>
+			<version>8.34.0.Final</version>
+		</dependency>
+		<dependency>
 			<groupId>org.kie</groupId>
-			<artifactId>kie-spring</artifactId>
-			<version>7.73.0.Final</version>
+			<artifactId>kie-api</artifactId>
+			<version>8.34.0.Final</version>
 		</dependency>
 	</dependencies>
 

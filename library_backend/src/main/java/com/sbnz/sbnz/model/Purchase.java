@@ -1,5 +1,7 @@
 package com.sbnz.sbnz.model;
 
+import com.sbnz.sbnz.converter.AddressConverter;
+import com.sbnz.sbnz.enums.PaymentMethod;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,18 +13,17 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-public class OrderItem {
+public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Book book;
-    @Column
-    private int quantity;
-    @Column
-    private double price;
-    @Column
-    private double discount;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Order order;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private AppUser user;
+    @Convert(converter = AddressConverter.class)
+    private Address deliveryAddress;
+    @Column
+    private PaymentMethod paymentMethod;
 }

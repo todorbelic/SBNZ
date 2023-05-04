@@ -39,14 +39,16 @@ public class BookServiceImpl implements BookService {
             Author a = new Author();
             a.setFirstName(bookDTO.getAuthorFirstName());
             a.setLastName(bookDTO.getAuthorLastName());
-
             Author newAuthor = authorRepository.save(a);
-
             b = new Book(bookDTO.getId(), bookDTO.getName(), newAuthor, bookDTO.getGenre(), bookDTO.getPrice());
             saved = bookRepository.save(b);
         }
 
         return saved;
+    }
+
+    public Book getById(Long id) {
+        return bookRepository.getById(id);
     }
 
     public boolean authorExists(BookWithAuthorName bookDTO) {
@@ -58,7 +60,6 @@ public class BookServiceImpl implements BookService {
                 return true;
             }
         }
-
         return false;
     }
 

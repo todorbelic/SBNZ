@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BooksComponent } from './books/books.component';
 import { MaterialModule } from "../../material/material.module";
 import { CartComponent } from './cart/cart.component';
+import { AddBookComponent } from './add-book/add-book.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { CartComponent } from './cart/cart.component';
     SignUpComponent,
     SignInComponent,
     BooksComponent,
-    CartComponent
+    CartComponent,
+    AddBookComponent
   ],
   imports: [
     CommonModule,

@@ -16,4 +16,8 @@ export class BookService {
     return this.http.get<BookWithAuthorsModel[]>(this.baseUrl + '/all', {headers: this.headers});
   }
 
+  addBook(newBook: any): Observable<BookWithAuthorsModel> {
+    return this.http.post<any>(this.baseUrl + '/addBook', newBook, {headers: this.headers})
+  }
+
 }

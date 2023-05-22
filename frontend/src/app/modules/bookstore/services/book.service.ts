@@ -20,4 +20,8 @@ export class BookService {
     return this.http.post<any>(this.baseUrl + '/addBook', newBook, {headers: this.headers})
   }
 
+  gradeBook(rating: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + '/gradeBook', rating, {headers: this.headers})
+  }
+
 }

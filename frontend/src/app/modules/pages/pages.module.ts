@@ -9,6 +9,8 @@ import { BooksComponent } from './books/books.component';
 import { MaterialModule } from "../../material/material.module";
 import { CartComponent } from './cart/cart.component';
 import { AddBookComponent } from './add-book/add-book.component';
+import { LeaveRatingComponent } from './leave-rating/leave-rating.component';
+
 
 @NgModule({
   declarations: [
@@ -17,14 +19,15 @@ import { AddBookComponent } from './add-book/add-book.component';
     SignInComponent,
     BooksComponent,
     CartComponent,
-    AddBookComponent
+    AddBookComponent,
+    LeaveRatingComponent
   ],
   imports: [
     CommonModule,
     AppRoutingModule,
     ReactiveFormsModule,
     MaterialModule,
-    FormsModule
+    FormsModule,
   ]
 })
 export class PagesModule { }

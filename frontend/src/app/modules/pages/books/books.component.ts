@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { BookService } from "../../bookstore/services/book.service";
 import { BookWithAuthorsModel } from "../../bookstore/dto/book-with-authors.model";
 import { TokenStorageService } from '../../bookstore/services/token-storage.service';
+import {MatDialog} from "@angular/material/dialog";
+import {LeaveRatingComponent} from "../leave-rating/leave-rating.component";
 
 @Component({
   selector: 'app-books',
@@ -15,7 +17,7 @@ export class BooksComponent implements OnInit {
 
 
 
-  constructor(public bookService: BookService, private tokenStorageService: TokenStorageService) {
+  constructor(public dialog: MatDialog, public bookService: BookService, private tokenStorageService: TokenStorageService) {
     this.isLoggedIn = this.tokenStorageService.isLoggedIn()
   }
 
@@ -44,6 +46,16 @@ export class BooksComponent implements OnInit {
     // cartItems.push(book);
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
     alert(`${book.name} added to cart`);
+  }
+
+  gradeBook(book : BookWithAuthorsModel) : void {
+    const dialogRef = this.dialog.open(LeaveRatingComponent, {
+      width: '280px',
+      data: {
+        bookId: book.id,
+        userId: this.tokenStorageService.getUser().id
+      }
+    })
   }
 
 }

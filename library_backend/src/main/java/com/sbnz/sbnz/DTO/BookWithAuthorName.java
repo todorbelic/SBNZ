@@ -3,10 +3,13 @@ package com.sbnz.sbnz.DTO;
 import com.sbnz.sbnz.model.Book;
 import com.sbnz.sbnz.enums.Genre;
 import com.sbnz.sbnz.model.OrderItem;
+import com.sbnz.sbnz.model.Rating;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,6 +25,7 @@ public class BookWithAuthorName {
     private double price;
     public int quantity;
     public double discount;
+    public Double averageRating;
     public double total;
 
     public BookWithAuthorName(Book book) {
@@ -30,7 +34,16 @@ public class BookWithAuthorName {
         this.name = book.getName();
         this.authorFirstName = book.getAuthor().getFirstName();
         this.authorLastName = book.getAuthor().getLastName();
+        this.averageRating = calculateAverageRating(book.getRatings());
         this.price = book.getPrice();
+    }
+
+    private Double calculateAverageRating(List<Rating> ratings) {
+        double sum = 0;
+        for (Rating r : ratings) {
+            sum += r.getValue();
+        }
+        return sum/ratings.size();
     }
 
     public BookWithAuthorName(OrderItem item) {

@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -26,4 +29,15 @@ public class Book {
     private Genre genre;
     @Column
     private double price;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    List<Rating> ratings;
+
+    public Book(Long id, String name, Author a, Genre genre, double price) {
+        this.setId(id);
+        this.setName(name);
+        this.setAuthor(a);
+        this.setGenre(genre);
+        this.setPrice(price);
+        this.setRatings(new ArrayList<>());
+    }
 }

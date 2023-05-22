@@ -1,6 +1,7 @@
 package com.sbnz.sbnz.controller;
 
 import com.sbnz.sbnz.DTO.BookWithAuthorName;
+import com.sbnz.sbnz.DTO.RatingDTO;
 import com.sbnz.sbnz.model.Book;
 import com.sbnz.sbnz.service.BookService;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ import java.util.List;
 @RequestMapping(value = "api/v1/books")
 public class BookController {
 
-private final BookService bookService;
+    private final BookService bookService;
 
     public BookController(BookService bookService) {
         this.bookService = bookService;
@@ -41,5 +42,14 @@ private final BookService bookService;
 
         BookWithAuthorName book = new BookWithAuthorName(newBook);
         return new ResponseEntity<>(book, HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/gradeBook")
+    public ResponseEntity<RatingDTO> gradeBook(@RequestBody RatingDTO ratingDTO) {
+        if (bookService.gradeBook(ratingDTO.getBookId(), ratingDTO.getUserId(), ratingDTO.getValue())) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 }

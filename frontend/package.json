@@ -22,6 +22,8 @@
     "@angular/router": "^14.1.0",
     "@popperjs/core": "^2.11.7",
     "bootstrap": "^5.2.3",
+    "igniteui-angular": "^16.0.0",
+    "igniteui-webcomponents": "^4.2.3",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"

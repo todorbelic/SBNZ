@@ -9,5 +9,6 @@ public interface BookService {
 
     List<Book> findAll();
     Book addBook(BookWithAuthorName bookDTO);
-    public Book getById(Long id);
+    Book getById(Long id);
+    Boolean gradeBook(Long bookId, Long userId, Double value);
 }

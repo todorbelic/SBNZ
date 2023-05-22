@@ -4,6 +4,7 @@ export class BookWithAuthorsModel {
   name: string = '';
   price: number = 0;
   total: number = 0;
+  averageRating: number = 0;
   authorFirstName: string = '';
   authorLastName: string = '';
   quantity: number = 0;
@@ -12,6 +13,7 @@ export class BookWithAuthorsModel {
   public constructor(obj?: any) {
     if (obj) {
       this.id = obj.id;
+      this.averageRating = obj.averageRating;
       this.genre = obj.genre;
       this.name = obj.name;
       this.price = obj.price;

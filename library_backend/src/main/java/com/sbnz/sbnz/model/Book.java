@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,6 +30,14 @@ public class Book {
     private Genre genre;
     @Column
     private double price;
+    @Column
+    private boolean recommended;
+    @Column
+    private Date addDate;
+    @Column
+    private Date publishDate;
+    @Column
+    private String recommendation;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     List<Rating> ratings;
 
@@ -38,6 +47,19 @@ public class Book {
         this.setAuthor(a);
         this.setGenre(genre);
         this.setPrice(price);
+        this.setRatings(new ArrayList<>());
+    }
+
+    public Book(Long id, String name, Author author, Genre genre, double price, boolean recommended, Date addDate, Date publishDate, String recommendation) {
+        this.id = id;
+        this.name = name;
+        this.author = author;
+        this.genre = genre;
+        this.price = price;
+        this.recommended = recommended;
+        this.addDate = addDate;
+        this.publishDate = publishDate;
+        this.recommendation = recommendation;
         this.setRatings(new ArrayList<>());
     }
 }

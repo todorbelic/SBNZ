@@ -8,7 +8,12 @@ import java.util.List;
 public interface BookService {
 
     List<Book> findAll();
+
     Book addBook(BookWithAuthorName bookDTO);
+
     Book getById(Long id);
+
     Boolean gradeBook(Long bookId, Long userId, Double value);
+
+    List<Book> GetNonAuthUserBookRecommendation();
 }

@@ -27,16 +27,16 @@ public class BookController {
         List<Book> books = bookService.findAll();
         List<BookWithAuthorName> booksDTO = new ArrayList<>();
 
-        for(Book b : books) {
+        for (Book b : books) {
             booksDTO.add(new BookWithAuthorName(b));
         }
         return new ResponseEntity<>(booksDTO, HttpStatus.OK);
     }
 
     @PostMapping(value = "/addBook")
-    public ResponseEntity<BookWithAuthorName> addBook(@RequestBody BookWithAuthorName bookDTO){
+    public ResponseEntity<BookWithAuthorName> addBook(@RequestBody BookWithAuthorName bookDTO) {
         Book newBook = bookService.addBook(bookDTO);
-        if(newBook == null){
+        if (newBook == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -51,5 +51,16 @@ public class BookController {
         } else {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
+    }
+
+    @GetMapping(value = "/non-auth-recommendations")
+    public ResponseEntity<List<BookWithAuthorName>> GetNonAuthUserBookRecommendation() {
+        List<Book> books = bookService.GetNonAuthUserBookRecommendation();
+        List<BookWithAuthorName> booksDTO = new ArrayList<>();
+
+        for (Book b : books) {
+            booksDTO.add(new BookWithAuthorName(b));
+        }
+        return new ResponseEntity<>(booksDTO, HttpStatus.OK);
     }
 }

@@ -2,11 +2,9 @@ package com.sbnz.sbnz.model;
 
 import com.sbnz.sbnz.enums.Genre;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
@@ -16,6 +14,7 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
+@ToString
 
 public class Book {
     @Id
@@ -33,11 +32,28 @@ public class Book {
     @Column
     private boolean recommended;
     @Column
-    private Date addDate;
+    private LocalDate addDate;
     @Column
-    private Date publishDate;
+    private LocalDate publishDate;
     @Column
     private String recommendation;
+
+    public void setAddDate(LocalDate addDate) {
+        this.addDate = addDate;
+    }
+
+    public void setPublishDate(LocalDate publishDate) {
+        this.publishDate = publishDate;
+    }
+
+    public LocalDate getAddDate() {
+        return addDate;
+    }
+
+    public LocalDate getPublishDate() {
+        return publishDate;
+    }
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     List<Rating> ratings;
 
@@ -50,7 +66,7 @@ public class Book {
         this.setRatings(new ArrayList<>());
     }
 
-    public Book(Long id, String name, Author author, Genre genre, double price, boolean recommended, Date addDate, Date publishDate, String recommendation) {
+    public Book(Long id, String name, Author author, Genre genre, double price, boolean recommended, LocalDate addDate, LocalDate publishDate, String recommendation) {
         this.id = id;
         this.name = name;
         this.author = author;

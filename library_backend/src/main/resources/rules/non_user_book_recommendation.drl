@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
+import java.time.LocalDate;
 
 rule "Insert Books"
 when
@@ -15,15 +16,20 @@ end
 
 rule "New Book - Added in the Last Month"
 when
-    $book: Book(addDate >= (new Date() - 30))
+
+    $localDate: LocalDate() from LocalDate.now()
+    $book: Book(addDate.isAfter($localDate.minusMonths(1)) && addDate.isBefore($localDate))
 then
+    System.out.println("1");
     $book.setRecommendation("New Book");
 end
 
 rule "New Book - Published in the Last Six Months"
 when
-    $book: Book(publishDate >= (new Date() - 180))
+     $localDate: LocalDate() from LocalDate.now()
+     $book: Book(publishDate.isAfter($localDate.minusMonths(6)) && publishDate.isBefore($localDate))
 then
+    System.out.println("2");
     $book.setRecommendation("New Book");
 end
 
@@ -43,28 +49,41 @@ end
 
 rule "Well-Rated Book - Average Rating 4 or Higher"
 when
-    $book: Book(ratings != null, $rating: Rating() from $book.getRatings(), accumulate($rating; $avg: average($rating.getValue()), $avg >= 4))
+    $book: Book($ratings: ratings, $ratings != null)
+    $rating: Rating($book == $book) from $ratings
+    $avg: Double() from accumulate($r: Rating() from $ratings, average($r.getValue()))
+    eval($avg >= 4.0)
 then
     $book.setRecommendation("Well-Rated Book");
 end
 
+
 rule "Poorly Rated Book - Average Rating 2.5 or Lower"
 when
-    $book: Book(ratings != null, $rating: Rating() from $book.getRatings(), accumulate($rating; $avg: average($rating.getValue()), $avg <= 2.5))
+    $book: Book($ratings: ratings, $ratings != null)
+    $rating: Rating($book == $book) from $ratings
+    $avg: Double() from accumulate($r: Rating() from $ratings, average($r.getValue()))
+    eval($avg <= 2.5)
 then
-    $book.setRecommendation("Poorly Rated Book");
+    $book.setRecommendation("Poorly-Rated Book");
 end
 
 rule "Neutral Book - Average Rating Between 2.5 and 4 or No Ratings Yet"
 when
-    $book: Book(ratings != null, $rating: Rating() from $book.getRatings(), $avg: average($rating.getValue()), ($avg >= 2.5 && $avg < 4) || $book.getRatings().isEmpty())
+    $book: Book($ratings: ratings, $ratings != null)
+    $rating: Rating($book == $book) from $ratings
+    $avg: Double() from accumulate($r: Rating() from $ratings, average($r.getValue()))
+    eval(($avg >= 2.5 && $avg < 4.0) || $book.getRatings().isEmpty())
 then
     $book.setRecommendation("Neutral Book");
 end
 
 rule "Recommend Popular and Well-Rated Books"
 when
-    $book: Book(recommendation == "Popular Book", ratings != null, $rating: Rating() from $book.getRatings(), accumulate($rating; $avg: average($rating.getValue()), $avg >= 4 || ($avg >= 2.5 && $avg < 4)))
+    $book: Book($ratings: ratings, $ratings != null)
+    $rating: Rating($book == $book) from $ratings
+    $avg: Double() from accumulate($r: Rating() from $ratings, average($r.getValue()))
+    eval(($avg >= 2.5) || $book.getRecommendation() == "Popular Book")
 then
     $book.setRecommended(true);
 end

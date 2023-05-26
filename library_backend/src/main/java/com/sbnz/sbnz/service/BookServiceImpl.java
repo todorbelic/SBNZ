@@ -117,9 +117,12 @@ public class BookServiceImpl implements BookService {
     public List<Book> GetNonAuthUserBookRecommendation() {
         KieSession kieSession = kieContainer.newKieSession();
         List<Book> books = bookRepository.findAll();
-        books.forEach(kieSession::insert);
+        kieSession.insert(books);
         kieSession.fireAllRules();
         kieSession.dispose();
+        for (Book b: books) {
+            bookRepository.save(b);
+        }
         return books;
     }
 

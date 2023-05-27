@@ -60,37 +60,37 @@ INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_
 VALUES ('Pride and Prejudice', 5, 0, 700, false, CURRENT_DATE, '2023-04-01');
 
 INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
-VALUES ('Algebra', 5, 4, 8000, false, CURRENT_DATE, '2023-05-01');
+VALUES ('Algebra', 5, 4, 8000, false, CURRENT_DATE, '2022-05-01');
 
 INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
-VALUES ('The Shining', 6, 1, 1500.00, false, CURRENT_DATE, '2023-06-01');
+VALUES ('The Shining', 6, 1, 1500.00, false, CURRENT_DATE, '2022-06-01');
 
 INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
-VALUES ('The Old Man and the Sea', 7, 3, 2500, false, CURRENT_DATE, '2023-07-01');
+VALUES ('The Old Man and the Sea', 7, 3, 2500, false, CURRENT_DATE, '2022-07-01');
 
 INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
-VALUES ('Mrs. Dalloway', 8, 4, 1200, false, CURRENT_DATE, '2023-08-01');
+VALUES ('Mrs. Dalloway', 8, 4, 1200, false, CURRENT_DATE, '2022-08-01');
 
 INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
-VALUES ('Adventures of Huckleberry Finn', 9, 1, 800, false, CURRENT_DATE, '2023-09-01');
+VALUES ('Adventures of Huckleberry Finn', 9, 1, 800, false, CURRENT_DATE, '2022-09-01');
 
 INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
-VALUES ('A Tale of Two Cities', 10, 0, 900, false, CURRENT_DATE, '2023-10-01');
+VALUES ('A Tale of Two Cities', 10, 0, 900, false, CURRENT_DATE, '2022-10-01');
 
 INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
-VALUES ('War and Peace', 6, 3, 4000, false, CURRENT_DATE, '2023-11-01');
+VALUES ('War and Peace', 6, 3, 4000, false, CURRENT_DATE, '2022-11-01');
 
 INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
-VALUES ('Murder on the Orient Express', 7, 2, 1800, false, CURRENT_DATE, '2023-12-01');
+VALUES ('Murder on the Orient Express', 7, 2, 1800, false, CURRENT_DATE, '2022-12-01');
 
 INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
-VALUES ('Of Mice and Men', 8, 1, 700, false, CURRENT_DATE, '2024-01-01');
+VALUES ('Of Mice and Men', 8, 1, 700, false, CURRENT_DATE, '2021-01-01');
 
 INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
-VALUES ('Hamlet', 9, 4, 1600, false, CURRENT_DATE, '2024-02-01');
+VALUES ('Hamlet', 9, 4, 1600, false, CURRENT_DATE, '2020-02-01');
 
 INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
-VALUES ('Wuthering Heights', 10, 0, 950, false, CURRENT_DATE, '2024-03-01');
+VALUES ('Wuthering Heights', 10, 0, 950, false, CURRENT_DATE, '2020-03-01');
 
 INSERT INTO rating (value, user_id, book_id)
 VALUES (3.5, 1, 1);

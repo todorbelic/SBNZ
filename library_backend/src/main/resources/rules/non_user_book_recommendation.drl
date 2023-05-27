@@ -18,9 +18,8 @@ rule "New Book - Added in the Last Month"
 when
 
     $localDate: LocalDate() from LocalDate.now()
-    $book: Book(addDate.isAfter($localDate.minusMonths(1)) && addDate.isBefore($localDate))
+    $book: Book(addDate.isAfter($localDate.minusMonths(1)) && addDate.isBefore($localDate.plusDays(1)))
 then
-    System.out.println("1");
     $book.setRecommendation("New Book");
 end
 
@@ -29,7 +28,6 @@ when
      $localDate: LocalDate() from LocalDate.now()
      $book: Book(publishDate.isAfter($localDate.minusMonths(6)) && publishDate.isBefore($localDate))
 then
-    System.out.println("2");
     $book.setRecommendation("New Book");
 end
 
@@ -66,6 +64,7 @@ when
     eval($avg <= 2.5)
 then
     $book.setRecommendation("Poorly-Rated Book");
+    $book.setRecommended(true);
 end
 
 rule "Neutral Book - Average Rating Between 2.5 and 4 or No Ratings Yet"
@@ -90,30 +89,34 @@ end
 
 rule "Recommend New Books"
 when
-    $book: Book(recommendation == "New Book")
+    $book: Book($ratings: ratings, $ratings !=  null)
+    eval($book.getRecommendation() == "New Book")
 then
     $book.setRecommended(true);
 end
 
-rule "Remove Poorly Rated Books if More Than 10 Recommendations"
+rule "Remove Poorly-Rated Books if More Than 10 Recommendations"
 when
-    $book: Book(recommended == true, recommendation != "Poorly Rated Book")
+    $book: Book()
     $count: Number(intValue > 10) from accumulate(
-        $b: Book(recommended == true, recommendation == "Poorly Rated Book"),
+        $b: Book(),
         count($b)
     )
+    eval($book.getRecommendation() == "Poorly-Rated Book")
 then
     $book.setRecommended(false);
+//    System.out.println($book.getName());
 end
 
 rule "Randomly Select 10 Recommendations"
 when
-    $bookList: List(size > 10) from accumulate(
-        $book: Book(recommended == true),
+    $bookList: List() from collect(Book())
+    $recommendedList: List() from accumulate(
+        $book: Book(recommended == true) from $bookList,
         collectList($book)
     )
 then
-    List<Book> randomBooks = new ArrayList<>($bookList);
+    List<Book> randomBooks = new ArrayList<>($recommendedList);
     Collections.shuffle(randomBooks);
     for (int i = 10; i < randomBooks.size(); i++) {
         Book randomBook = randomBooks.get(i);

@@ -98,8 +98,9 @@ end
 rule "Remove Poorly-Rated Books if More Than 10 Recommendations"
 when
     $book: Book()
+    $bookList: List() from collect(Book())
     $count: Number(intValue > 10) from accumulate(
-        $b: Book(),
+        $b: Book(recommended == true) from $bookList,
         count($b)
     )
     eval($book.getRecommendation() == "Poorly-Rated Book")

@@ -27,7 +27,7 @@ import { LeaveRatingComponent } from './leave-rating/leave-rating.component';
     AppRoutingModule,
     ReactiveFormsModule,
     MaterialModule,
-    FormsModule,
+    FormsModule
   ]
 })
 export class PagesModule { }

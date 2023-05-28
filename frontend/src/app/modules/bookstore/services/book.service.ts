@@ -24,4 +24,7 @@ export class BookService {
     return this.http.post<any>(this.baseUrl + '/gradeBook', rating, {headers: this.headers})
   }
 
+  getRecommendedNonAuth() {
+    return this.http.get<BookWithAuthorsModel[]>(this.baseUrl + '/non-auth-recommendations', {headers: this.headers});
+  }
 }

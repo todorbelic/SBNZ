@@ -9,12 +9,16 @@ import com.sbnz.sbnz.repository.AppUserRepository;
 import com.sbnz.sbnz.repository.AuthorRepository;
 import com.sbnz.sbnz.repository.BookRepository;
 import com.sbnz.sbnz.repository.RatingRepository;
+
+import org.kie.api.runtime.KieContainer;
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -25,25 +29,31 @@ public class BookServiceImpl implements BookService {
     private final RatingRepository ratingRepository;
     private final AppUserRepository appUserRepository;
 
+    private final KieContainer kieContainer;
+
     @Autowired
-    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository, RatingRepository ratingRepository,
-                           AppUserRepository appUserRepository) {
+    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository,
+            RatingRepository ratingRepository,
+            AppUserRepository appUserRepository, KieContainer kieContainer) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.ratingRepository = ratingRepository;
         this.appUserRepository = appUserRepository;
+        this.kieContainer = kieContainer;
     }
 
     @Override
     public List<Book> findAll() {
         return bookRepository.findAll();
     }
+
     @Override
-    public Book addBook(BookWithAuthorName bookDTO){
+    public Book addBook(BookWithAuthorName bookDTO) {
         Book b;
         Book saved;
-        if(authorExists(bookDTO)){
-            Author a = authorRepository.findByFirstNameAndLastName(bookDTO.getAuthorFirstName(), bookDTO.getAuthorLastName());
+        if (authorExists(bookDTO)) {
+            Author a = authorRepository.findByFirstNameAndLastName(bookDTO.getAuthorFirstName(),
+                    bookDTO.getAuthorLastName());
             b = new Book(bookDTO.getId(), bookDTO.getName(), a, bookDTO.getGenre(), bookDTO.getPrice());
             saved = bookRepository.save(b);
         } else {
@@ -67,13 +77,13 @@ public class BookServiceImpl implements BookService {
         Rating rating = new Rating();
         Optional<AppUser> appUser = appUserRepository.findById(userId);
         Optional<Book> book = bookRepository.findById(bookId);
-        if(!(appUser.isPresent() && book.isPresent())) {
+        if (!(appUser.isPresent() && book.isPresent())) {
             throw new IllegalStateException();
         }
         rating.setAppUser(appUser.get());
         rating.setBook(book.get());
         rating.setValue(value);
-        if(bookAlreadyRatedByUser(book, appUser)) {
+        if (bookAlreadyRatedByUser(book, appUser)) {
             return false;
         }
         ratingRepository.save(rating);
@@ -95,13 +105,27 @@ public class BookServiceImpl implements BookService {
 
         List<Author> authors = authorRepository.findAll();
 
-        for(Author a: authors){
-            if(a.getFirstName().equalsIgnoreCase(bookDTO.getAuthorFirstName()) && a.getLastName().equalsIgnoreCase(bookDTO.getAuthorLastName())){
+        for (Author a : authors) {
+            if (a.getFirstName().equalsIgnoreCase(bookDTO.getAuthorFirstName())
+                    && a.getLastName().equalsIgnoreCase(bookDTO.getAuthorLastName())) {
                 return true;
             }
         }
         return false;
     }
 
+    @Override
+    public List<Book> GetNonAuthUserBookRecommendation() {
+        KieSession kieSession = kieContainer.newKieSession();
+        List<Book> books = bookRepository.findAll();
+        kieSession.insert(books);
+        kieSession.fireAllRules();
+        kieSession.dispose();
+
+        return books.stream()
+                .filter(Book::isRecommended)
+                .limit(10)
+                .collect(Collectors.toList());
+    }
 
 }

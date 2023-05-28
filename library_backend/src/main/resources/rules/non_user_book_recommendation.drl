@@ -1,0 +1,129 @@
+package rules;
+import com.sbnz.sbnz.model.*;
+import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
+import java.time.LocalDate;
+
+rule "Insert Books"
+when
+    $bookList: List()
+    $book: Book() from $bookList
+then
+    insert($book);
+end
+
+rule "New Book - Added in the Last Month"
+when
+
+    $localDate: LocalDate() from LocalDate.now()
+    $book: Book(addDate.isAfter($localDate.minusMonths(1)) && addDate.isBefore($localDate.plusDays(1)))
+then
+    $book.setRecommendation("New Book");
+end
+
+rule "New Book - Published in the Last Six Months"
+when
+     $localDate: LocalDate() from LocalDate.now()
+     $book: Book(publishDate.isAfter($localDate.minusMonths(6)) && publishDate.isBefore($localDate))
+then
+    $book.setRecommendation("New Book");
+end
+
+rule "Popular Book - Has 20 or More Ratings"
+when
+    $book: Book(ratings.size() >= 20)
+then
+    $book.setRecommendation("Popular Book");
+end
+
+rule "Popular Book - New and Has 10 or More Ratings"
+when
+    $book: Book(ratings.size() >= 10, addDate >= (new Date() - 30))
+then
+    $book.setRecommendation("Popular Book");
+end
+
+rule "Well-Rated Book - Average Rating 4 or Higher"
+when
+    $book: Book($ratings: ratings, $ratings != null)
+    $rating: Rating($book == $book) from $ratings
+    $avg: Double() from accumulate($r: Rating() from $ratings, average($r.getValue()))
+    eval($avg >= 4.0)
+then
+    $book.setRecommendation("Well-Rated Book");
+end
+
+
+rule "Poorly Rated Book - Average Rating 2.5 or Lower"
+when
+    $book: Book($ratings: ratings, $ratings != null)
+    $rating: Rating($book == $book) from $ratings
+    $avg: Double() from accumulate($r: Rating() from $ratings, average($r.getValue()))
+    eval($avg <= 2.5)
+then
+    $book.setRecommendation("Poorly-Rated Book");
+    $book.setRecommended(true);
+end
+
+rule "Neutral Book - Average Rating Between 2.5 and 4 or No Ratings Yet"
+when
+    $book: Book($ratings: ratings, $ratings != null)
+    $rating: Rating($book == $book) from $ratings
+    $avg: Double() from accumulate($r: Rating() from $ratings, average($r.getValue()))
+    eval(($avg >= 2.5 && $avg < 4.0) || $book.getRatings().isEmpty())
+then
+    $book.setRecommendation("Neutral Book");
+end
+
+rule "Recommend Popular and Well-Rated Books"
+when
+    $book: Book($ratings: ratings, $ratings != null)
+    $rating: Rating($book == $book) from $ratings
+    $avg: Double() from accumulate($r: Rating() from $ratings, average($r.getValue()))
+    eval(($avg >= 2.5) || $book.getRecommendation() == "Popular Book")
+then
+    $book.setRecommended(true);
+end
+
+rule "Recommend New Books"
+when
+    $book: Book($ratings: ratings, $ratings !=  null)
+    eval($book.getRecommendation() == "New Book")
+then
+    $book.setRecommended(true);
+end
+
+rule "Remove Poorly-Rated Books if More Than 10 Recommendations"
+when
+    $book: Book()
+    $bookList: List() from collect(Book())
+    $count: Number(intValue > 10) from accumulate(
+        $b: Book(recommended == true) from $bookList,
+        count($b)
+    )
+    eval($book.getRecommendation() == "Poorly-Rated Book")
+then
+    $book.setRecommended(false);
+//    System.out.println($book.getName());
+end
+
+rule "Randomly Select 10 Recommendations"
+when
+    $bookList: List() from collect(Book())
+    $recommendedList: List() from accumulate(
+        $book: Book(recommended == true) from $bookList,
+        collectList($book)
+    )
+then
+    List<Book> randomBooks = new ArrayList<>($recommendedList);
+    Collections.shuffle(randomBooks);
+    for (int i = 10; i < randomBooks.size(); i++) {
+        Book randomBook = randomBooks.get(i);
+        if (randomBook.isRecommended()) {
+            randomBook.setRecommended(false);
+        }
+    }
+end
+

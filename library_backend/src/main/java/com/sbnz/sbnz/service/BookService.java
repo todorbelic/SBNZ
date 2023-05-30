@@ -16,4 +16,6 @@ public interface BookService {
     Boolean gradeBook(Long bookId, Long userId, Double value);
 
     List<Book> GetNonAuthUserBookRecommendation();
+
+    List<Book> GetNewUserBookRecommendation(Long userId);
 }

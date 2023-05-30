@@ -128,4 +128,11 @@ public class BookServiceImpl implements BookService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<Book> GetNewUserBookRecommendation(Long userId){
+        List<Rating> ratings = ratingRepository.findAllByUserId(userId);
+        if(ratings.size() < 10){
+            AppUser u = appUserRepository.getReferenceById(userId);
+        }
+    }
 }

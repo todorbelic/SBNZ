@@ -225,6 +225,24 @@ VALUES (3 , 32);
 INSERT INTO book_ratings (book_id, ratings_id)
 VALUES (3 , 33);
 
+INSERT INTO author_books (author_id, books_id) VALUES (1, 1);
+INSERT INTO author_books (author_id, books_id) VALUES (2, 2);
+INSERT INTO author_books (author_id, books_id) VALUES (3, 3);
+INSERT INTO author_books (author_id, books_id) VALUES (4, 4);
+INSERT INTO author_books (author_id, books_id) VALUES (5, 5);
+INSERT INTO author_books (author_id, books_id) VALUES (5, 6);
+INSERT INTO author_books (author_id, books_id) VALUES (6, 7);
+INSERT INTO author_books (author_id, books_id) VALUES (7, 8);
+INSERT INTO author_books (author_id, books_id) VALUES (8, 9);
+INSERT INTO author_books (author_id, books_id) VALUES (9, 10);
+INSERT INTO author_books (author_id, books_id) VALUES (10, 11);
+INSERT INTO author_books (author_id, books_id) VALUES (6, 12);
+INSERT INTO author_books (author_id, books_id) VALUES (7, 13);
+INSERT INTO author_books (author_id, books_id) VALUES (8, 14);
+INSERT INTO author_books (author_id, books_id) VALUES (9, 15);
+INSERT INTO author_books (author_id, books_id) VALUES (10, 16);
+
+
 
 
 

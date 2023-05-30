@@ -37,6 +37,20 @@ public class Book {
     private LocalDate publishDate;
     @Column
     private String recommendation;
+    @Column
+    private double averageRating;
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating() {
+        double sum = 0;
+        for (Rating r: ratings){
+            sum += r.getValue();
+        }
+        this.averageRating = sum/ratings.size();
+    }
 
     public void setAddDate(LocalDate addDate) {
         this.addDate = addDate;

@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Random;
 
 public interface RatingRepository extends JpaRepository<Rating, Long> {
-    List<Rating> findAllByUserId(Long userId);
+    List<Rating> findAllByAppUser_Id(Long userId);
 }

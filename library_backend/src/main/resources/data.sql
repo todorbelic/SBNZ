@@ -1,13 +1,13 @@
-INSERT INTO app_user (username, role, password)
-VALUES ('1', 0,'$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC');
-INSERT INTO app_user (username, role, password)
-VALUES ('2', 0,'$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC');
-INSERT INTO app_user (username, role, password)
-VALUES ('3', 0,'$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC');
-INSERT INTO app_user (username, role, password)
-VALUES ('4', 0,'$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC');
-INSERT INTO app_user (username, role, password)
-VALUES ('5', 0,'$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC');
+INSERT INTO app_user (username, role, password, favourite_genre)
+VALUES ('1', 0,'$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC', 1);
+INSERT INTO app_user (username, role, password, favourite_genre)
+VALUES ('2', 0,'$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC', 1);
+INSERT INTO app_user (username, role, password, favourite_genre)
+VALUES ('3', 0,'$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC', 1);
+INSERT INTO app_user (username, role, password, favourite_genre)
+VALUES ('4', 0,'$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC', 2);
+INSERT INTO app_user (username, role, password, favourite_genre)
+VALUES ('5', 0,'$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC', 2);
 INSERT INTO app_user (username, role, password)
 VALUES ('6', 0,'$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC');
 INSERT INTO app_user (username, role, password)

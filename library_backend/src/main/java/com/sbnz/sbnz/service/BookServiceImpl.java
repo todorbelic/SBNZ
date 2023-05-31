@@ -1,6 +1,7 @@
 package com.sbnz.sbnz.service;
 
 import com.sbnz.sbnz.DTO.BookWithAuthorName;
+import com.sbnz.sbnz.enums.Genre;
 import com.sbnz.sbnz.model.AppUser;
 import com.sbnz.sbnz.model.Author;
 import com.sbnz.sbnz.model.Book;
@@ -130,9 +131,27 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> GetNewUserBookRecommendation(Long userId){
-        List<Rating> ratings = ratingRepository.findAllByUserId(userId);
+        List<Rating> ratings = ratingRepository.findAllByAppUser_Id(userId);
+        List<Book> books = bookRepository.findAll();
         if(ratings.size() < 10){
-            AppUser u = appUserRepository.getReferenceById(userId);
+            AppUser u = appUserRepository.getById(userId);
+            if(u.getFavouriteGenre() == null){
+               return GetNonAuthUserBookRecommendation();
+            }
+
+            KieSession kieSession= kieContainer.newKieSession();
+            List<Author> authors = authorRepository.findAll();
+            Genre g = u.getFavouriteGenre();
+            kieSession.insert(authors);
+            kieSession.insert(books);
+            kieSession.insert(g);
+
+            kieSession.fireAllRules();
+            kieSession.dispose();
+
+            return books.stream().limit(10).collect(Collectors.toList());
         }
+
+        return books;
     }
 }

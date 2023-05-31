@@ -63,4 +63,15 @@ public class BookController {
         }
         return new ResponseEntity<>(booksDTO, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/new-user-recommendations/{userId}")
+    public ResponseEntity<List<BookWithAuthorName>> getNewUserBookRecommendation(@PathVariable("userId") Long userId){
+        List<Book> books = bookService.GetNewUserBookRecommendation(userId);
+        List<BookWithAuthorName> booksDTO = new ArrayList<>();
+
+        for (Book b : books) {
+            booksDTO.add(new BookWithAuthorName(b));
+        }
+        return new ResponseEntity<>(booksDTO, HttpStatus.OK);
+    }
 }

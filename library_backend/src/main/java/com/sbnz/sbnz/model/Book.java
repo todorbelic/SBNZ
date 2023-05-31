@@ -38,7 +38,7 @@ public class Book {
     @Column
     private String recommendation;
     @Column
-    private double averageRating;
+    private Double averageRating;
 
     public double getAverageRating() {
         return averageRating;

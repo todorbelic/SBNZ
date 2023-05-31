@@ -1,5 +1,6 @@
 package com.sbnz.sbnz.model;
 
+import com.sbnz.sbnz.enums.Genre;
 import com.sbnz.sbnz.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,6 +34,9 @@ public class AppUser implements UserDetails {
     private String lastName;
     @Column
     private Role role;
+
+    @Column
+    private Genre favouriteGenre;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

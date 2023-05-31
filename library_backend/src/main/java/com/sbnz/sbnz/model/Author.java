@@ -21,7 +21,7 @@ public class Author {
     @OneToMany( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     List<Book> books;
     @Column
-    private int popularity;
+    private Integer popularity;
 
     public Author(Long id, String firstName, String lastName) {
         this.id = id;

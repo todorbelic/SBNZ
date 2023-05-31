@@ -33,10 +33,10 @@ agenda-group "older_user"
     $userAvgRating: Double() from accumulate($r: Rating() from $ratings, average($r.getValue()))
     eval(RecommendationHelper.piersonCoefficient($loggedInUserRatings, $ratings, $loggedInUserAvgRating, $userAvgRating) >= 0.5)
   then
-    System.out.println($loggedInUser.getUsername());
-    System.out.println($otherUsers.getUsername());
+    System.out.println("Similar users: "+ $loggedInUser.getUsername()+ " and " + $otherUsers.getUsername());
     for(Rating rating : (List<Rating>)$ratings) {
         if(rating.getValue() >= 4) {
+            System.out.println("Book recommended based on user similarity: " + rating.getBook().getName());
             insert(new RecommendedBook(rating.getBook()));
         }
     }
@@ -58,6 +58,7 @@ agenda-group "older_user"
     $book : Book(id != $userRating.getBook().getId(), $ratings: ratings)
     eval(RecommendationHelper.similarBooks($userRating, $ratings) >= 0.7)
   then
+    System.out.println("Book recommended based on rating similarity: " + $book.getName());
     insert(new RecommendedBook($book));
 end
 
@@ -84,7 +85,7 @@ then
      for (HashMap.Entry<Author, Integer> set : authorMap.entrySet()) {
         if(set.getValue() >= 3) {
             insert(set.getKey());
-            System.out.println("Author of interest:" + set.getKey().getFirstName());
+            System.out.println("Author of interest: " + set.getKey().getFirstName());
         }
 
      }
@@ -113,7 +114,7 @@ then
         if(set.getValue() / purchases.size()  > 0.3) {
             GenreOfInterest genreOfInterest = new GenreOfInterest(set.getKey());
             insert(genreOfInterest);
-            System.out.println("Genre of interest:" + set.getKey().toString());
+            System.out.println("Genre of interest: " + set.getKey().toString());
         }
      }
 end
@@ -124,6 +125,7 @@ when
     $author: GenreOfInterest($genre: genre)
     $book: Book(genre == $genre)
 then
+    System.out.println("Book recommended based on user preference: Genre ="+ $genre.toString() + ": "  + $book.getName());
     insert(new RecommendedBook($book));
 end
 
@@ -133,6 +135,7 @@ when
     $author: Author()
     $book: Book(author.getId() == $author.getId())
 then
+    System.out.println("Book recommended based on user preference: Author ="+ $author.getFirstName() + " " + $author.getLastName() + ": " + $book.getName());
     insert(new RecommendedBook($book));
 end
 

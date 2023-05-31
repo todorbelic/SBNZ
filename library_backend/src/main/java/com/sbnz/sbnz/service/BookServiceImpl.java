@@ -174,17 +174,18 @@ public class BookServiceImpl implements BookService {
     public List<Book> GetAuthUserBookRecommendation(Long userId){
         List<Rating> ratings = ratingRepository.findAllByAppUserId(userId);
         List<Book> books = bookRepository.findAll();
-        if(ratings.size() < 10){
+        if(ratings.size() < 10) {
             AppUser u = appUserRepository.getById(userId);
-            if(u.getFavouriteGenre() == null){
+
+            if (u.getFavouriteGenre() == null) {
                 return GetNonAuthUserBookRecommendation();
             }
 
-            KieSession kieSession= kieContainer.newKieSession();
+            KieSession kieSession = kieContainer.newKieSession();
             List<Author> authors = authorRepository.findAll();
 
-            for(Author a: authors){
-                if(a.getBooks().isEmpty() || a.getBooks() == null){
+            for (Author a : authors) {
+                if (a.getBooks().isEmpty() || a.getBooks() == null) {
                     List<Book> authorsBooks = bookRepository.findAllByAuthorId(a.getId());
                     a.setBooks(authorsBooks);
                     authorRepository.save(a);
@@ -201,6 +202,7 @@ public class BookServiceImpl implements BookService {
 
             kieSession.fireAllRules();
             kieSession.dispose();
+
 
             return books.stream().limit(10).collect(Collectors.toList());
         }

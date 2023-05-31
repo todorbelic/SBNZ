@@ -63,16 +63,19 @@ public class Author {
         this.books = books;
     }
 
-    public int getPopularity() {
+    public Integer getPopularity() {
         return popularity;
     }
 
     public void setPopularity() {
-        int sum = 0;
+        Integer sum = 0;
         for(Book b: books){
-            for (Rating r: b.ratings){
-                sum += r.getValue();
+            if(b.ratings == null){
+                sum += 0;
+            } else {
+                sum += b.ratings.size();
             }
+
         }
         this.popularity = sum;
     }

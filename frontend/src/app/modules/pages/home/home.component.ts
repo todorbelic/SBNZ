@@ -27,6 +27,11 @@ export class HomeComponent implements OnInit {
 
   getBooks(): void {
     if(this.tokenStorageService.isLoggedIn()) {
+      this.bookService.getRecommendedAuth(this.tokenStorageService.getUser().id).subscribe(res => {
+        this.books = res;
+        console.log(res);
+        console.log(this.books);
+      });
 
     } else {
       this.bookService.getRecommendedNonAuth().subscribe(res => {

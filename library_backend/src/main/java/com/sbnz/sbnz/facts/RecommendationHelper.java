@@ -36,9 +36,7 @@ public class RecommendationHelper {
                 }
             }
         }
-        if(totalNumOfSameBookRatings == 0) {
-            return 0;
-        }
-        return totalNumOfSameBookRatings / totalNumOfSameBookSimilarRatings;
+
+        return totalNumOfSameBookRatings / (totalNumOfSameBookSimilarRatings + Math.pow(10, -6));
     }
 }

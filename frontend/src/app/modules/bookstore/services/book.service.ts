@@ -27,4 +27,8 @@ export class BookService {
   getRecommendedNonAuth() {
     return this.http.get<BookWithAuthorsModel[]>(this.baseUrl + '/non-auth-recommendations', {headers: this.headers});
   }
+
+  getRecommendedAuth(userId: any) {
+    return this.http.get<BookWithAuthorsModel[]>(this.baseUrl + '/auth-user-recommendations/' + userId, {headers: this.headers});
+  }
 }

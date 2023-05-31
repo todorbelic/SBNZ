@@ -177,19 +177,34 @@ public class BookServiceImpl implements BookService {
         if(ratings.size() < 10){
             AppUser u = appUserRepository.getById(userId);
             if(u.getFavouriteGenre() == null){
-               return GetNonAuthUserBookRecommendation();
+                return GetNonAuthUserBookRecommendation();
             }
+
             KieSession kieSession= kieContainer.newKieSession();
             List<Author> authors = authorRepository.findAll();
+
+            for(Author a: authors){
+                if(a.getBooks().isEmpty() || a.getBooks() == null){
+                    List<Book> authorsBooks = bookRepository.findAllByAuthorId(a.getId());
+                    a.setBooks(authorsBooks);
+                    authorRepository.save(a);
+                }
+            }
+
             Genre g = u.getFavouriteGenre();
             kieSession.insert(authors);
             kieSession.insert(books);
             kieSession.insert(g);
+
+            kieSession.setGlobal("zanr", g);
+            kieSession.getAgenda().getAgendaGroup("test").setFocus();
+
             kieSession.fireAllRules();
             kieSession.dispose();
+
             return books.stream().limit(10).collect(Collectors.toList());
         }
-        return GetOlderUserBookRecommendation(userId);
+        return GetOlderUserBookRecommendation(userId).stream().limit(20).toList();
     }
 }
 

@@ -53,6 +53,7 @@ INSERT INTO author (first_name, last_name) VALUES ('Frank', 'Herbert');
 INSERT INTO author (first_name, last_name) VALUES ('J.K.', 'Rowling');
 
 
+
 INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
 VALUES ('To Kill a Mockingbird', 1, 1, 2000.00, false, CURRENT_DATE, '2023-01-01');
 
@@ -224,34 +225,34 @@ VALUES (5.0, 10, 2);
 INSERT INTO rating (value, user_id, book_id)
 VALUES (5.0, 11, 2);
 INSERT INTO rating (value, user_id, book_id)
-VALUES (1.0, 1, 3);
+VALUES (1.0, 1, 13);
 INSERT INTO rating (value, user_id, book_id)
-VALUES (1.0, 2, 3);
+VALUES (1.0, 2, 13);
 INSERT INTO rating (value, user_id, book_id)
-VALUES (1.0, 3, 3);
+VALUES (1.0, 3, 13);
 INSERT INTO rating (value, user_id, book_id)
-VALUES (1.0, 4, 3);
+VALUES (1.0, 4, 13);
 INSERT INTO rating (value, user_id, book_id)
-VALUES (1.0, 5, 3);
+VALUES (1.0, 5, 13);
 INSERT INTO rating (value, user_id, book_id)
-VALUES (1.0, 6, 3);
+VALUES (1.0, 6, 13);
 INSERT INTO rating (value, user_id, book_id)
-VALUES (1.0, 7, 3);
+VALUES (1.0, 7, 13);
 INSERT INTO rating (value, user_id, book_id)
-VALUES (1.0, 8, 3);
+VALUES (1.0, 8, 13);
 INSERT INTO rating (value, user_id, book_id)
-VALUES (1.0, 9, 3);
+VALUES (1.0, 9, 13);
 INSERT INTO rating (value, user_id, book_id)
-VALUES (1.0, 10, 3);
+VALUES (1.0, 10, 13);
 INSERT INTO rating (value, user_id, book_id)
-VALUES (1.0, 11, 3);
+VALUES (1.0, 11, 13);
 
 INSERT INTO rating (value, user_id, book_id)
 VALUES (3.0, 12, 1);
 INSERT INTO rating (value, user_id, book_id)
 VALUES (3.0, 12, 2);
 INSERT INTO rating (value, user_id, book_id)
-VALUES (4.0, 12, 3);
+VALUES (5.0, 12, 3);
 INSERT INTO rating (value, user_id, book_id)
 VALUES (4.0, 12, 4);
 INSERT INTO rating (value, user_id, book_id)
@@ -274,7 +275,7 @@ VALUES (3.0, 11, 1);
 INSERT INTO rating (value, user_id, book_id)
 VALUES (3.0, 11, 2);
 INSERT INTO rating (value, user_id, book_id)
-VALUES (4.0, 11, 3);
+VALUES (5.0, 11, 3);
 INSERT INTO rating (value, user_id, book_id)
 VALUES (4.0, 11, 4);
 INSERT INTO rating (value, user_id, book_id)
@@ -337,27 +338,27 @@ VALUES (2 , 21);
 INSERT INTO book_ratings (book_id, ratings_id)
 VALUES (2 , 22);
 INSERT INTO book_ratings (book_id, ratings_id)
-VALUES (3 , 23);
+VALUES (13 , 23);
 INSERT INTO book_ratings (book_id, ratings_id)
-VALUES (3 , 24);
+VALUES (13 , 24);
 INSERT INTO book_ratings (book_id, ratings_id)
-VALUES (3 , 25);
+VALUES (13 , 25);
 INSERT INTO book_ratings (book_id, ratings_id)
-VALUES (3 , 26);
+VALUES (13 , 26);
 INSERT INTO book_ratings (book_id, ratings_id)
-VALUES (3 , 27);
+VALUES (13 , 27);
 INSERT INTO book_ratings (book_id, ratings_id)
-VALUES (3 , 28);
+VALUES (13 , 28);
 INSERT INTO book_ratings (book_id, ratings_id)
-VALUES (3 , 29);
+VALUES (13 , 29);
 INSERT INTO book_ratings (book_id, ratings_id)
-VALUES (3 , 30);
+VALUES (13 , 30);
 INSERT INTO book_ratings (book_id, ratings_id)
-VALUES (3 , 31);
+VALUES (13 , 31);
 INSERT INTO book_ratings (book_id, ratings_id)
-VALUES (3 , 32);
+VALUES (13 , 32);
 INSERT INTO book_ratings (book_id, ratings_id)
-VALUES (3 , 33);
+VALUES (13 , 33);
 
 INSERT INTO book_ratings (book_id, ratings_id)
 VALUES (1 , 34);

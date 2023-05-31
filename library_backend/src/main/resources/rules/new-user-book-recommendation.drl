@@ -1,0 +1,65 @@
+package rules;
+import java.util.List
+import com.sbnz.sbnz.model.*
+import com.sbnz.sbnz.enums.*
+import java.util.Collections
+import java.util.Comparator
+import com.sbnz.sbnz.model.Book
+import java.util.ArrayList
+
+query authorBelongsToGenre(Author $author,Genre $genre)
+    Author($books : books, id == $author.id) and
+    Number(doubleValue >= 0.3) from accumulate(
+        average(Book(genre == $genre) from $books)
+    )
+end
+
+rule "Insert books"
+    when
+        $bookList: List()
+        $book: Book() from $bookList
+    then
+        insert($book)
+end
+
+rule "Insert authors"
+    when
+        $authorList: List()
+        $author: Author() from $authorList
+    then
+        insert($author)
+end
+
+rule "Set popularity"
+    when
+        $author: Author()
+        $genre: Genre()
+        authorBelongsToGenre($author, $genre)
+    then
+        $author.setPopularity();
+end
+
+rule "Order by populariy"
+    when
+        $authorList: List() from collect(Author())
+    then
+        $authorList.sort(Comparator.comparing(Author::getPopularity).reversed());
+end
+
+rule "Get books by 4 popular authors sorted by average rating descending"
+    when
+        $authorList: List() from collect(Author())
+    then
+        List<Book> books = new ArrayList<Book>();
+        List<Author> authors = new ArrayList<>($authorList);
+        for (int i = 0; i < 4; i++){
+            books.addAll(authors.get(i).getBooks());
+        }
+        for(Book b: books){
+            b.setAverageRating();
+        }
+        books.sort(Comparator.comparing(Book::getAverageRating).reversed());
+        System.out.println(books);
+ end
+
+

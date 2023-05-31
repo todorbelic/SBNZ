@@ -12,8 +12,9 @@ import java.util.HashMap
 import java.util.Collections
 import com.sbnz.sbnz.enums.Genre;
 
-rule "Insert Books fa"
+rule "Insert All Books"
 lock-on-active true
+agenda-group "older_user"
 when
     $bookList: List()
     $book: Book() from $bookList
@@ -22,15 +23,18 @@ then
     insert(new RecommendedBook($book));
 end
 
-rule "Example Rule"
+rule "Recommendation based on user similarity"
+agenda-group "older_user"
   when
     $userList: List()
-    $loggedInUser: LoggedInUser($loggedInUserRatings: ratings)
+    $loggedInUser: LoggedInUser($loggedInUserRatings: ratings, ratings.size() > 10)
     $otherUsers: AppUser($ratings: ratings, id != $loggedInUser.id) from $userList
     $loggedInUserAvgRating: Double() from accumulate($r: Rating() from $loggedInUserRatings, average($r.getValue()))
     $userAvgRating: Double() from accumulate($r: Rating() from $ratings, average($r.getValue()))
     eval(RecommendationHelper.piersonCoefficient($loggedInUserRatings, $ratings, $loggedInUserAvgRating, $userAvgRating) >= 0.5)
   then
+    System.out.println($loggedInUser.getUsername());
+    System.out.println($otherUsers.getUsername());
     for(Rating rating : (List<Rating>)$ratings) {
         if(rating.getValue() >= 4) {
             insert(new RecommendedBook(rating.getBook()));
@@ -38,27 +42,30 @@ rule "Example Rule"
     }
 end
 
-rule "Example Rusdle"
+rule "Insert Good User Ratings"
+agenda-group "older_user"
   when
-    $loggedInUser: LoggedInUser($loggedInUserRatings: ratings)
+    $loggedInUser: LoggedInUser($loggedInUserRatings: ratings, ratings.size() >= 10)
     $rating : Rating(value >= 4) from $loggedInUser.getRatings()
   then
     insert(new UserRating($rating));
 end
 
-rule "Example Rusdgrle"
+rule "Recommend Based On Rating Similarity"
+agenda-group "older_user"
   when
     $userRating: UserRating()
     $book : Book(id != $userRating.getBook().getId(), $ratings: ratings)
-    eval(RecommendationHelper.similarBooks($userRating, $ratings) >= 0.5)
+    eval(RecommendationHelper.similarBooks($userRating, $ratings) >= 0.7)
   then
     insert(new RecommendedBook($book));
 end
 
 
-rule "Randomly Select 10 Recommendations"
+rule "Recommend Based On Frequently Purchased Author Books In Last 6 Months"
+agenda-group "older_user"
 when
-    $loggedInUser: LoggedInUser($userPurchases : purchases)
+    $loggedInUser: LoggedInUser($userPurchases : purchases, ratings.size() > 10)
     $localDate: LocalDate() from LocalDate.now()
     $purchasesInLastSixMonths: List() from accumulate(
         $userPurchase: UserPurchase(purchaseDate.isAfter($localDate.minusMonths(6))) from $userPurchases,
@@ -75,14 +82,18 @@ then
             authorMap.put(purchase.getBook().getAuthor(), 1);
     }
      for (HashMap.Entry<Author, Integer> set : authorMap.entrySet()) {
-        if(set.getValue() >= 3)
+        if(set.getValue() >= 3) {
             insert(set.getKey());
+            System.out.println("Author of interest:" + set.getKey().getFirstName());
+        }
+
      }
 end
 
-rule "Randomly Select 1adw0 Recommendations"
+rule "Recommend Based On Frequently Purchased Genres In Last 6 Months"
+agenda-group "older_user"
 when
-    $loggedInUser: LoggedInUser($userPurchases : purchases)
+    $loggedInUser: LoggedInUser($userPurchases : purchases, ratings.size() > 10)
     $localDate: LocalDate() from LocalDate.now()
     $purchasesInLastSixMonths: List() from accumulate(
         $userPurchase: UserPurchase(purchaseDate.isAfter($localDate.minusMonths(6))) from $userPurchases,
@@ -102,11 +113,13 @@ then
         if(set.getValue() / purchases.size()  > 0.3) {
             GenreOfInterest genreOfInterest = new GenreOfInterest(set.getKey());
             insert(genreOfInterest);
+            System.out.println("Genre of interest:" + set.getKey().toString());
         }
      }
 end
 
-rule "Add Book Recommaaaaaaaadawdendation To List"
+rule "Recommend Books Based On Genre Of Interest"
+agenda-group "older_user"
 when
     $author: GenreOfInterest($genre: genre)
     $book: Book(genre == $genre)
@@ -114,7 +127,8 @@ then
     insert(new RecommendedBook($book));
 end
 
-rule "Add Book Radecommadawdendation To List"
+rule "Recommend Books Based On Author Of Interest"
+agenda-group "older_user"
 when
     $author: Author()
     $book: Book(author.getId() == $author.getId())
@@ -124,51 +138,20 @@ end
 
 
 rule "Add Book Recommendation To List"
+agenda-group "older_user"
 when
     $recommendedBooks : RecommendedBookList()
     $book: RecommendedBook()
 then
     $recommendedBooks.addBookRecommendation($book);
-    System.out.println($recommendedBooks.getRecommendedBooks().size());
 end
 
 rule "Sort Book Recommendation List"
+agenda-group "older_user"
 when
-    $recommendedBooks : RecommendedBookList(recommendedBooks.size() > 20)
+    $recommendedBooks : RecommendedBookList()
+    eval($recommendedBooks.getRecommendedBooks().size() > 20)
 then
     $recommendedBooks.sortList();
 end
 
-
-/*
-rule "Remove Poorly-Rated Books if More Than 10 Recommendations"
-when
-    $book: RecommendedBook()
-    $recommendedList:  RecommendedBookList($recommendedBooks : recommendedBooks)
-    $count: Number(intValue > 0) from accumulate(
-        $b: RecommendedBook(id == $book.getId()) from $recommendedBooks,
-        count($b)
-    )
-then
-    List<RecommendedBook> recommendedBooks = new ArrayList<>($recommendedBooks);
-    for(RecommendedBook book : recommendedBooks) {
-        if(book.getId() == $book.getId()) {
-            book.setRecommendationPoints(book.getRecommendationPoints() + 1);
-        }
-    }
-    $recommendedList.setRecommendedBooks(recommendedBooks);
-    System.out.println($recommendedBooks.size() + "111") ;
-end
-
-rule "Remove Poorly-Rated Boaefoks if More Than 10 Recommendations"
-when
-    $book: RecommendedBook()
-    RecommendedBookList($recommendedBooks : recommendedBooks)
-    $count: Number(intValue == 0) from accumulate(
-        $b: RecommendedBook(id == $book.getId()) from $recommendedBooks,
-        count($b)
-    )
-then
-    $recommendedBooks.add($book);
-    System.out.println($recommendedBooks.size() + "!111111111");
-end*/

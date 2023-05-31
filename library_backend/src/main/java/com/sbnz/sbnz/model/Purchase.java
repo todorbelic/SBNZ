@@ -1,5 +1,4 @@
 package com.sbnz.sbnz.model;
-
 import com.sbnz.sbnz.converter.AddressConverter;
 import com.sbnz.sbnz.enums.PaymentMethod;
 import jakarta.persistence.*;
@@ -7,9 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.LocalDate;
-import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor

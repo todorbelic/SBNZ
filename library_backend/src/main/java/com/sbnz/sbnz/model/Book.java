@@ -1,6 +1,7 @@
 package com.sbnz.sbnz.model;
 
 import com.sbnz.sbnz.enums.Genre;
+import com.sbnz.sbnz.facts.RecommendedBook;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,6 +38,20 @@ public class Book {
     private LocalDate publishDate;
     @Column
     private String recommendation;
+    @Column
+    private Double averageRating;
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating() {
+        double sum = 0;
+        for (Rating r: ratings){
+            sum += r.getValue();
+        }
+        this.averageRating = sum/ratings.size();
+    }
 
     public void setAddDate(LocalDate addDate) {
         this.addDate = addDate;
@@ -77,5 +92,16 @@ public class Book {
         this.publishDate = publishDate;
         this.recommendation = recommendation;
         this.setRatings(new ArrayList<>());
+    }
+
+    public Book(RecommendedBook recommendedBook) {
+        this.id = recommendedBook.getId();
+        this.name = recommendedBook.getName();
+        this.author = recommendedBook.getAuthor();
+        this.genre = recommendedBook.getGenre();
+        this.price = recommendedBook.getPrice();
+        this.addDate = recommendedBook.getAddDate();
+        this.publishDate = recommendedBook.getPublishDate();
+        this.ratings = recommendedBook.getRatingList();
     }
 }

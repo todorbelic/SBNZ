@@ -18,4 +18,5 @@ public interface BookService {
     List<Book> GetNonAuthUserBookRecommendation();
 
     List<Book> GetAuthUserBookRecommendation(Long userID);
+
 }

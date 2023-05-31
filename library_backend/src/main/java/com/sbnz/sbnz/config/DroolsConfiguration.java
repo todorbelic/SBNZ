@@ -13,7 +13,9 @@ import org.springframework.context.annotation.Configuration;
 public class DroolsConfiguration {
     private static final String drlFile = "rules/discount.drl";
     private static final String drlFile2 = "rules/non_user_book_recommendation.drl";
-    private static final String drlFile3 = "rules/auth_user_book_recommendation.drl";
+    private static final String drlFile3 = "rules/new-user-book-recommendation";
+    private static final String drlFile4 = "rules/auth_user_book_recommendation.drl";
+
 
     @Bean
     public KieContainer kieContainer() {
@@ -21,8 +23,9 @@ public class DroolsConfiguration {
 
         KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
         kieFileSystem.write(ResourceFactory.newClassPathResource(drlFile));
-        //kieFileSystem.write(ResourceFactory.newClassPathResource(drlFile2));
+        kieFileSystem.write(ResourceFactory.newClassPathResource(drlFile2));
         kieFileSystem.write(ResourceFactory.newClassPathResource(drlFile3));
+        kieFileSystem.write(ResourceFactory.newClassPathResource(drlFile4));
         KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem);
         kieBuilder.buildAll();
         KieModule kieModule = kieBuilder.getKieModule();

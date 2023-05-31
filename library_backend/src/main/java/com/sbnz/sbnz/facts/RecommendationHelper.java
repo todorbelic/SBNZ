@@ -20,7 +20,6 @@ public class RecommendationHelper {
         }
         double denominator = Math.sqrt(userDenominator) * Math.sqrt(loggedInUserDenominator);
         double score = numerator / denominator;
-        System.out.println("Score = " + score);
         return score;
     }
 
@@ -29,11 +28,9 @@ public class RecommendationHelper {
         int totalNumOfSameBookSimilarRatings = 0;
         for (Rating rating : similarBookRatings) {
             for (Rating potSimilarRating : rating.getAppUser().getRatings()) {
-                System.out.println(potSimilarRating.getBook().getName());
                 if(potSimilarRating.getBook().getId() == userRating.getBook().getId()) {
-                    System.out.println("aaaaaaaaaaaaaaaaaaa");
                     totalNumOfSameBookRatings++;
-                    if(Math.abs(potSimilarRating.getValue() - userRating.getValue()) < 1) {
+                    if(Math.abs(potSimilarRating.getValue() - userRating.getValue()) <= 1) {
                         totalNumOfSameBookSimilarRatings++;
                     }
                 }
@@ -42,7 +39,6 @@ public class RecommendationHelper {
         if(totalNumOfSameBookRatings == 0) {
             return 0;
         }
-        System.out.println(totalNumOfSameBookSimilarRatings/ totalNumOfSameBookRatings + "eeeeeeeeeeeeeedadwd");
         return totalNumOfSameBookRatings / totalNumOfSameBookSimilarRatings;
     }
 }

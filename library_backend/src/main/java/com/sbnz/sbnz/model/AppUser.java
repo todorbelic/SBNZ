@@ -1,5 +1,6 @@
 package com.sbnz.sbnz.model;
 
+import com.sbnz.sbnz.enums.Genre;
 import com.sbnz.sbnz.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,7 +21,6 @@ import java.util.List;
 @ToString
 public class AppUser implements UserDetails {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,6 +37,8 @@ public class AppUser implements UserDetails {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Rating> ratings;
+    @Column
+    private Genre favouriteGenre;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

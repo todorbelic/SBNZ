@@ -16,6 +16,7 @@ import java.util.ArrayList
 //end
 
 global Genre zanr;
+global List<Book> sortedBooks
 
 rule "Insert books"
 agenda-group "test"
@@ -62,18 +63,28 @@ rule "Get books by 4 popular authors sorted by average rating descending"
 agenda-group "test"
 when
     $authorList: List() from collect(Author())
+    $bookList: List() from collect(Book())
 then
     List<Book> books = new ArrayList<Book>();
+    sortedBooks = new ArrayList<Book>();
     List<Author> authors = new ArrayList<>($authorList);
     for (int i = 0; i < 4; i++){
         books.addAll(authors.get(i).getBooks());
+        sortedBooks.addAll(authors.get(i).getBooks());
     }
     for(Book b: books){
         b.setAverageRating();
     }
 
+    for (Book b: sortedBooks){
+         b.setAverageRating();
+    }
+
     books.sort(Comparator.comparing(Book::getAverageRating).reversed());
+    sortedBooks.sort(Comparator.comparing(Book::getAverageRating).reversed());
     System.out.println(books);
+    System.out.println(sortedBooks);
+    $bookList = sortedBooks;
  end
 
 

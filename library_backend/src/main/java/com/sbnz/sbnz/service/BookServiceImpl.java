@@ -176,7 +176,6 @@ public class BookServiceImpl implements BookService {
         List<Book> books = bookRepository.findAll();
         if(ratings.size() < 10) {
             AppUser u = appUserRepository.getById(userId);
-
             if (u.getFavouriteGenre() == null) {
                 return GetNonAuthUserBookRecommendation();
             }

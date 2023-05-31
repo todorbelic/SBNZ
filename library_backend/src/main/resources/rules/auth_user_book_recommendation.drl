@@ -1,0 +1,157 @@
+package rules;
+import com.sbnz.sbnz.model.*;
+import com.sbnz.sbnz.model.Rating;
+import com.sbnz.sbnz.model.Author;
+import com.sbnz.sbnz.facts.*;
+import java.util.List
+import org.drools.core.util.Drools
+import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.HashMap
+import java.util.Collections
+import com.sbnz.sbnz.enums.Genre;
+
+rule "Insert All Books"
+lock-on-active true
+agenda-group "older_user"
+when
+    $bookList: List()
+    $book: Book() from $bookList
+then
+    insert($book);
+    insert(new RecommendedBook($book));
+end
+
+rule "Recommendation based on user similarity"
+agenda-group "older_user"
+  when
+    $userList: List()
+    $loggedInUser: LoggedInUser($loggedInUserRatings: ratings, ratings.size() > 10)
+    $otherUsers: AppUser($ratings: ratings, id != $loggedInUser.id) from $userList
+    $loggedInUserAvgRating: Double() from accumulate($r: Rating() from $loggedInUserRatings, average($r.getValue()))
+    $userAvgRating: Double() from accumulate($r: Rating() from $ratings, average($r.getValue()))
+    eval(RecommendationHelper.piersonCoefficient($loggedInUserRatings, $ratings, $loggedInUserAvgRating, $userAvgRating) >= 0.5)
+  then
+    System.out.println($loggedInUser.getUsername());
+    System.out.println($otherUsers.getUsername());
+    for(Rating rating : (List<Rating>)$ratings) {
+        if(rating.getValue() >= 4) {
+            insert(new RecommendedBook(rating.getBook()));
+        }
+    }
+end
+
+rule "Insert Good User Ratings"
+agenda-group "older_user"
+  when
+    $loggedInUser: LoggedInUser($loggedInUserRatings: ratings, ratings.size() >= 10)
+    $rating : Rating(value >= 4) from $loggedInUser.getRatings()
+  then
+    insert(new UserRating($rating));
+end
+
+rule "Recommend Based On Rating Similarity"
+agenda-group "older_user"
+  when
+    $userRating: UserRating()
+    $book : Book(id != $userRating.getBook().getId(), $ratings: ratings)
+    eval(RecommendationHelper.similarBooks($userRating, $ratings) >= 0.7)
+  then
+    insert(new RecommendedBook($book));
+end
+
+
+rule "Recommend Based On Frequently Purchased Author Books In Last 6 Months"
+agenda-group "older_user"
+when
+    $loggedInUser: LoggedInUser($userPurchases : purchases, ratings.size() > 10)
+    $localDate: LocalDate() from LocalDate.now()
+    $purchasesInLastSixMonths: List() from accumulate(
+        $userPurchase: UserPurchase(purchaseDate.isAfter($localDate.minusMonths(6))) from $userPurchases,
+        collectList($userPurchase)
+    )
+then
+    HashMap<Author, Integer> authorMap = new HashMap<>();
+    List<UserPurchase> purchases = new ArrayList<>($purchasesInLastSixMonths);
+    for(UserPurchase purchase : purchases) {
+        if(authorMap.containsKey(purchase.getBook().getAuthor())){
+            authorMap.replace(purchase.getBook().getAuthor(), authorMap.get(purchase.getBook().getAuthor()) + 1);
+        }
+        else
+            authorMap.put(purchase.getBook().getAuthor(), 1);
+    }
+     for (HashMap.Entry<Author, Integer> set : authorMap.entrySet()) {
+        if(set.getValue() >= 3) {
+            insert(set.getKey());
+            System.out.println("Author of interest:" + set.getKey().getFirstName());
+        }
+
+     }
+end
+
+rule "Recommend Based On Frequently Purchased Genres In Last 6 Months"
+agenda-group "older_user"
+when
+    $loggedInUser: LoggedInUser($userPurchases : purchases, ratings.size() > 10)
+    $localDate: LocalDate() from LocalDate.now()
+    $purchasesInLastSixMonths: List() from accumulate(
+        $userPurchase: UserPurchase(purchaseDate.isAfter($localDate.minusMonths(6))) from $userPurchases,
+        collectList($userPurchase)
+    )
+then
+    HashMap<Genre, Integer> authorMap = new HashMap<>();
+    List<UserPurchase> purchases = new ArrayList<>($purchasesInLastSixMonths);
+    for(UserPurchase purchase : purchases) {
+        if(authorMap.containsKey(purchase.getBook().getGenre())){
+            authorMap.replace(purchase.getBook().getGenre(), authorMap.get(purchase.getBook().getGenre()) + 1);
+        }
+        else
+            authorMap.put(purchase.getBook().getGenre(), 1);
+    }
+     for (HashMap.Entry<Genre, Integer> set : authorMap.entrySet()) {
+        if(set.getValue() / purchases.size()  > 0.3) {
+            GenreOfInterest genreOfInterest = new GenreOfInterest(set.getKey());
+            insert(genreOfInterest);
+            System.out.println("Genre of interest:" + set.getKey().toString());
+        }
+     }
+end
+
+rule "Recommend Books Based On Genre Of Interest"
+agenda-group "older_user"
+when
+    $author: GenreOfInterest($genre: genre)
+    $book: Book(genre == $genre)
+then
+    insert(new RecommendedBook($book));
+end
+
+rule "Recommend Books Based On Author Of Interest"
+agenda-group "older_user"
+when
+    $author: Author()
+    $book: Book(author.getId() == $author.getId())
+then
+    insert(new RecommendedBook($book));
+end
+
+
+rule "Add Book Recommendation To List"
+agenda-group "older_user"
+when
+    $recommendedBooks : RecommendedBookList()
+    $book: RecommendedBook()
+then
+    $recommendedBooks.addBookRecommendation($book);
+end
+
+rule "Sort Book Recommendation List"
+agenda-group "older_user"
+when
+    $recommendedBooks : RecommendedBookList()
+    eval($recommendedBooks.getRecommendedBooks().size() > 20)
+then
+    $recommendedBooks.sortList();
+end
+

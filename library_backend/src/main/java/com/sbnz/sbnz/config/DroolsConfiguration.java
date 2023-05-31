@@ -14,7 +14,7 @@ public class DroolsConfiguration {
     private static final String drlFile = "rules/discount.drl";
     private static final String drlFile2 = "rules/non_user_book_recommendation.drl";
 
-    private static final String drlFile3 = "rules/new-user-book-recommendation";
+    private static final String drlFile3 = "rules/new-user-book-recommendation.drl";
 
     @Bean
     public KieContainer kieContainer() {

@@ -141,10 +141,22 @@ public class BookServiceImpl implements BookService {
 
             KieSession kieSession= kieContainer.newKieSession();
             List<Author> authors = authorRepository.findAll();
+
+            for(Author a: authors){
+                if(a.getBooks().isEmpty() || a.getBooks() == null){
+                    List<Book> authorsBooks = bookRepository.findAllByAuthorId(a.getId());
+                    a.setBooks(authorsBooks);
+                    authorRepository.save(a);
+                }
+            }
+
             Genre g = u.getFavouriteGenre();
             kieSession.insert(authors);
             kieSession.insert(books);
             kieSession.insert(g);
+
+            kieSession.setGlobal("zanr", g);
+            kieSession.getAgenda().getAgendaGroup("test").setFocus();
 
             kieSession.fireAllRules();
             kieSession.dispose();

@@ -20,26 +20,26 @@ INSERT INTO app_user (username, role, password)
 VALUES ('10', 0,'$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC');
 INSERT INTO app_user (username, role, password)
 VALUES ('11', 0,'$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC');
-INSERT INTO author (first_name, last_name)
-VALUES ('Harper', 'Lee');
-INSERT INTO author (first_name, last_name)
-VALUES ('George', 'Orwell');
-INSERT INTO author (first_name, last_name)
-VALUES ('J.R.R.', 'Tolkien');
-INSERT INTO author (first_name, last_name)
-VALUES ('F. Scott', 'Fitzgerald');
-INSERT INTO author (first_name, last_name)
-VALUES ('Jane', 'Austen');
-INSERT INTO author (first_name, last_name) VALUES ('Stephen', 'King');
-INSERT INTO author (first_name, last_name) VALUES ('Ernest', 'Hemingway');
-INSERT INTO author (first_name, last_name) VALUES ('Virginia', 'Woolf');
-INSERT INTO author (first_name, last_name) VALUES ('Mark', 'Twain');
-INSERT INTO author (first_name, last_name) VALUES ('Charles', 'Dickens');
-INSERT INTO author (first_name, last_name) VALUES ('Leo', 'Tolstoy');
-INSERT INTO author (first_name, last_name) VALUES ('Agatha', 'Christie');
-INSERT INTO author (first_name, last_name) VALUES ('John', 'Steinbeck');
-INSERT INTO author (first_name, last_name) VALUES ('William', 'Shakespeare');
-INSERT INTO author (first_name, last_name) VALUES ('Emily', 'Brontë');
+INSERT INTO author (first_name, last_name, popularity)
+VALUES ('Harper', 'Lee', 0);
+INSERT INTO author (first_name, last_name, popularity)
+VALUES ('George', 'Orwell', 0);
+INSERT INTO author (first_name, last_name, popularity)
+VALUES ('J.R.R.', 'Tolkien', 0);
+INSERT INTO author (first_name, last_name, popularity)
+VALUES ('F. Scott', 'Fitzgerald', 0);
+INSERT INTO author (first_name, last_name, popularity)
+VALUES ('Jane', 'Austen', 0);
+INSERT INTO author (first_name, last_name, popularity) VALUES ('Stephen', 'King', 0);
+INSERT INTO author (first_name, last_name, popularity) VALUES ('Ernest', 'Hemingway', 0);
+INSERT INTO author (first_name, last_name, popularity) VALUES ('Virginia', 'Woolf', 0);
+INSERT INTO author (first_name, last_name, popularity) VALUES ('Mark', 'Twain', 0);
+INSERT INTO author (first_name, last_name, popularity) VALUES ('Charles', 'Dickens', 0);
+INSERT INTO author (first_name, last_name, popularity) VALUES ('Leo', 'Tolstoy', 0);
+INSERT INTO author (first_name, last_name, popularity) VALUES ('Agatha', 'Christie', 0);
+INSERT INTO author (first_name, last_name, popularity) VALUES ('John', 'Steinbeck', 0);
+INSERT INTO author (first_name, last_name, popularity) VALUES ('William', 'Shakespeare', 0);
+INSERT INTO author (first_name, last_name, popularity) VALUES ('Emily', 'Brontë', 0);
 
 /*INSERT INTO author (first_name, last_name, books)
 VALUES ('J.K.', 'Rowling', '{1,2,3}');*/

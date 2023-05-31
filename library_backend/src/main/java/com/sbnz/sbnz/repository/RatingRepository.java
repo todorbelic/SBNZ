@@ -8,4 +8,5 @@ import java.util.Random;
 
 public interface RatingRepository extends JpaRepository<Rating, Long> {
     List<Rating> findAllByAppUser_Id(Long userId);
+
 }

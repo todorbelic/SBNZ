@@ -8,60 +8,72 @@ import com.sbnz.sbnz.model.Book
 import java.util.ArrayList
 
 
-query authorBelongsToGenre(Author $author,Genre $genre)
-    Author($books : books, id == $author.id) and
-    Number(doubleValue >= 0.3) from accumulate(
-        average(Book(genre == $genre) from $books)
-    )
-end
+//query authorBelongsToGenre(Author $author,Genre $genre)
+//    Author($books : books, id == $author.id) and
+//    Number(doubleValue >= 0.3) from accumulate(Book(genre == $genre, $r: ratings),
+//        $avg: average($books)
+//    )
+//end
+
+global Genre zanr;
 
 rule "Insert books"
-    when
-        $bookList: List()
-        $book: Book() from $bookList
-    then
-        insert($book)
+agenda-group "test"
+when
+    $bookList: List()
+    $book: Book() from $bookList
+then
+    insert($book);
 end
 
 rule "Insert authors"
-    when
-        $authorList: List()
-        $author: Author() from $authorList
-    then
-        insert($author)
+agenda-group "test"
+when
+    $authorList: List()
+    $author: Author() from $authorList
+then
+    insert($author);
 end
 
-rule "Set popularity"
-    when
-        $author: Author()
-        $genre: Genre()
-        authorBelongsToGenre($author, $genre)
-    then
-        $author.setPopularity();
+rule "Set popularity for authors"
+agenda-group "test"
+when
+    $author: Author($books: books)
+    $genre: Genre()
+    Number(doubleValue() >= 0.3) from accumulate(
+        Book(genre == zanr) from $books,
+        init(double count = 0;),
+        action(count += 1;),
+        result(count/$books.size())
+    )
+then
+    $author.setPopularity();
 end
 
-rule "Order by populariy"
-    when
-        $authorList: List() from collect(Author())
-    then
-        $authorList.sort(Comparator.comparing(Author::getPopularity).reversed());
+rule "Order by popularity"
+agenda-group "test"
+when
+    $authorList: List() from collect(Author())
+then
+    $authorList.sort(Comparator.nullsLast(Comparator.comparing(Author::getPopularity)).reversed());
 end
 
 rule "Get books by 4 popular authors sorted by average rating descending"
-    when
-        $authorList: List() from collect(Author())
-    then
-        List<Book> books = new ArrayList<Book>();
-        List<Author> authors = new ArrayList<>($authorList);
-        for (int i = 0; i < 4; i++){
-            books.addAll(authors.get(i).getBooks());
-        }
-        for(Book b: books){
-            b.setAverageRating();
-        }
+agenda-group "test"
+when
+    $authorList: List() from collect(Author())
+then
+    List<Book> books = new ArrayList<Book>();
+    List<Author> authors = new ArrayList<>($authorList);
+    for (int i = 0; i < 4; i++){
+        books.addAll(authors.get(i).getBooks());
+    }
+    for(Book b: books){
+        b.setAverageRating();
+    }
 
-        books.sort(Comparator.comparing(Book::getAverageRating).reversed());
-        System.out.println(books);
+    books.sort(Comparator.comparing(Book::getAverageRating).reversed());
+    System.out.println(books);
  end
 
 

@@ -20,6 +20,9 @@ INSERT INTO app_user (username, role, password)
 VALUES ('10', 0,'$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC');
 INSERT INTO app_user (username, role, password)
 VALUES ('11', 0,'$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC');
+INSERT INTO app_user (username, role, password)
+VALUES ('todor', 0,'$2a$10$c9ANL2IaV0RNMiwN0PKfSOqozojOQDXtxSDXjXggxpyyCfek9YmVG');
+
 INSERT INTO author (first_name, last_name)
 VALUES ('Harper', 'Lee');
 INSERT INTO author (first_name, last_name)
@@ -30,6 +33,7 @@ INSERT INTO author (first_name, last_name)
 VALUES ('F. Scott', 'Fitzgerald');
 INSERT INTO author (first_name, last_name)
 VALUES ('Jane', 'Austen');
+
 INSERT INTO author (first_name, last_name) VALUES ('Stephen', 'King');
 INSERT INTO author (first_name, last_name) VALUES ('Ernest', 'Hemingway');
 INSERT INTO author (first_name, last_name) VALUES ('Virginia', 'Woolf');
@@ -40,6 +44,9 @@ INSERT INTO author (first_name, last_name) VALUES ('Agatha', 'Christie');
 INSERT INTO author (first_name, last_name) VALUES ('John', 'Steinbeck');
 INSERT INTO author (first_name, last_name) VALUES ('William', 'Shakespeare');
 INSERT INTO author (first_name, last_name) VALUES ('Emily', 'Brontë');
+INSERT INTO author (first_name, last_name) VALUES ('Ivo', 'Andric');
+INSERT INTO author (first_name, last_name) VALUES ('Frank', 'Herbert');
+INSERT INTO author (first_name, last_name) VALUES ('J.K.', 'Rowling');
 
 /*INSERT INTO author (first_name, last_name, books)
 VALUES ('J.K.', 'Rowling', '{1,2,3}');*/
@@ -91,6 +98,33 @@ VALUES ('Hamlet', 9, 4, 1600, false, CURRENT_DATE, '2020-02-01');
 
 INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
 VALUES ('Wuthering Heights', 10, 0, 950, false, CURRENT_DATE, '2020-03-01');
+
+INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
+VALUES ('Na drini cuprija', 16, 0, 950, false, CURRENT_DATE, '2020-03-01');
+
+INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
+VALUES ('Prokleta avlija', 16, 0, 950, false, CURRENT_DATE, '2020-03-01');
+
+INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
+VALUES ('Dune', 17, 0, 950, false, CURRENT_DATE, '2020-03-01');
+
+INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
+VALUES ('Children Of Dune', 17, 0, 1234, false, CURRENT_DATE, '2020-03-01');
+
+INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
+VALUES ('Dune Messiah', 17, 0, 450, false, CURRENT_DATE, '2020-03-01');
+
+INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
+VALUES ('Harry Potter and the Philosophers Stone', 18, 0, 2950, false, CURRENT_DATE, '2020-03-01');
+
+INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
+VALUES ('Harry Potter and the Chamber of Secrets', 18, 0, 350, false, CURRENT_DATE, '2020-03-01');
+
+INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
+VALUES ('Harry Potter and the Goblet of Fire', 18, 0, 9250, false, CURRENT_DATE, '2020-03-01');
+
+INSERT INTO book (name, author_id, genre, price, recommended, add_date, publish_date)
+VALUES ('Harry Potter and the Prisoner of Azkaban', 18, 0, 9504, false, CURRENT_DATE, '2020-03-01');
 
 INSERT INTO rating (value, user_id, book_id)
 VALUES (3.5, 1, 1);
@@ -158,6 +192,7 @@ INSERT INTO rating (value, user_id, book_id)
 VALUES (1.0, 10, 3);
 INSERT INTO rating (value, user_id, book_id)
 VALUES (1.0, 11, 3);
+
 INSERT INTO book_ratings (book_id, ratings_id)
 VALUES (1 , 1);
 INSERT INTO book_ratings (book_id, ratings_id)

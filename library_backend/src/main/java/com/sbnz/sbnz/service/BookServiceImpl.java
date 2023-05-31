@@ -1,20 +1,17 @@
 package com.sbnz.sbnz.service;
 
 import com.sbnz.sbnz.DTO.BookWithAuthorName;
-import com.sbnz.sbnz.model.AppUser;
-import com.sbnz.sbnz.model.Author;
-import com.sbnz.sbnz.model.Book;
-import com.sbnz.sbnz.model.Rating;
-import com.sbnz.sbnz.repository.AppUserRepository;
-import com.sbnz.sbnz.repository.AuthorRepository;
-import com.sbnz.sbnz.repository.BookRepository;
-import com.sbnz.sbnz.repository.RatingRepository;
+import com.sbnz.sbnz.facts.*;
+import com.sbnz.sbnz.model.*;
+import com.sbnz.sbnz.repository.*;
 
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.mvel2.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,15 +21,14 @@ import java.util.stream.Collectors;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
-
     private final AuthorRepository authorRepository;
     private final RatingRepository ratingRepository;
     private final AppUserRepository appUserRepository;
-
+    private final PurchaseRepository purchaseRepository;
     private final KieContainer kieContainer;
 
     @Autowired
-    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository,
+    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository, PurchaseRepository purchaseRepository,
             RatingRepository ratingRepository,
             AppUserRepository appUserRepository, KieContainer kieContainer) {
         this.bookRepository = bookRepository;
@@ -40,6 +36,7 @@ public class BookServiceImpl implements BookService {
         this.ratingRepository = ratingRepository;
         this.appUserRepository = appUserRepository;
         this.kieContainer = kieContainer;
+        this.purchaseRepository = purchaseRepository;
     }
 
     @Override
@@ -121,11 +118,39 @@ public class BookServiceImpl implements BookService {
         kieSession.insert(books);
         kieSession.fireAllRules();
         kieSession.dispose();
-
         return books.stream()
                 .filter(Book::isRecommended)
                 .limit(10)
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<Book> GetAuthUserBookRecommendation(Long userID) {
+        Optional<AppUser> loggedUser = appUserRepository.findById(userID);
+        List<Purchase> userOrders = purchaseRepository.findAllByUserId(userID);
+        List<AppUser> allUsers = appUserRepository.findAll();
+        for(AppUser user : allUsers)  {
+            List<Rating> ratings = ratingRepository.findAllByAppUserId(user.getId());
+            user.setRatings(ratings);
+        }
+        LoggedInUser loggedInUser = new LoggedInUser(loggedUser.get());
+        List<UserPurchase> userPurchases = new ArrayList<>();
+        for(Purchase purchase : userOrders) {
+            for(OrderItem orderItem : purchase.getOrder().getOrderItems()) {
+                userPurchases.add(new UserPurchase(orderItem.getBook(), purchase.getDate()));
+            }
+        }
+        loggedInUser.setPurchases(userPurchases);
+        List<Book> allBooks = bookRepository.findAll();
+        KieSession kieSession = kieContainer.newKieSession();
+        kieSession.insert(loggedInUser);
+        RecommendedBookList list = new RecommendedBookList();
+        kieSession.insert(list);
+        kieSession.insert(allUsers);
+        kieSession.insert(allBooks);
+        kieSession.fireAllRules();
+        kieSession.dispose();
+        List<RecommendedBook> jea = list.getRecommendedBooks();
+        return new ArrayList<>();
+    }
 }

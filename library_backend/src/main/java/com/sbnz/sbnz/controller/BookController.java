@@ -63,4 +63,14 @@ public class BookController {
         }
         return new ResponseEntity<>(booksDTO, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/auth-recommendations")
+    public ResponseEntity<List<BookWithAuthorName>> GetAuthUserBookRecommendation() {
+        List<Book> books = bookService.GetAuthUserBookRecommendation(1l);
+        List<BookWithAuthorName> booksDTO = new ArrayList<>();
+        for (Book b : books) {
+            booksDTO.add(new BookWithAuthorName(b));
+        }
+        return new ResponseEntity<>(booksDTO, HttpStatus.OK);
+    }
 }

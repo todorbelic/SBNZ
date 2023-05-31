@@ -1,0 +1,174 @@
+package rules;
+import com.sbnz.sbnz.model.*;
+import com.sbnz.sbnz.model.Rating;
+import com.sbnz.sbnz.model.Author;
+import com.sbnz.sbnz.facts.*;
+import java.util.List
+import org.drools.core.util.Drools
+import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.HashMap
+import java.util.Collections
+import com.sbnz.sbnz.enums.Genre;
+
+rule "Insert Books fa"
+lock-on-active true
+when
+    $bookList: List()
+    $book: Book() from $bookList
+then
+    insert($book);
+    insert(new RecommendedBook($book));
+end
+
+rule "Example Rule"
+  when
+    $userList: List()
+    $loggedInUser: LoggedInUser($loggedInUserRatings: ratings)
+    $otherUsers: AppUser($ratings: ratings, id != $loggedInUser.id) from $userList
+    $loggedInUserAvgRating: Double() from accumulate($r: Rating() from $loggedInUserRatings, average($r.getValue()))
+    $userAvgRating: Double() from accumulate($r: Rating() from $ratings, average($r.getValue()))
+    eval(RecommendationHelper.piersonCoefficient($loggedInUserRatings, $ratings, $loggedInUserAvgRating, $userAvgRating) >= 0.5)
+  then
+    for(Rating rating : (List<Rating>)$ratings) {
+        if(rating.getValue() >= 4) {
+            insert(new RecommendedBook(rating.getBook()));
+        }
+    }
+end
+
+rule "Example Rusdle"
+  when
+    $loggedInUser: LoggedInUser($loggedInUserRatings: ratings)
+    $rating : Rating(value >= 4) from $loggedInUser.getRatings()
+  then
+    insert(new UserRating($rating));
+end
+
+rule "Example Rusdgrle"
+  when
+    $userRating: UserRating()
+    $book : Book(id != $userRating.getBook().getId(), $ratings: ratings)
+    eval(RecommendationHelper.similarBooks($userRating, $ratings) >= 0.5)
+  then
+    insert(new RecommendedBook($book));
+end
+
+
+rule "Randomly Select 10 Recommendations"
+when
+    $loggedInUser: LoggedInUser($userPurchases : purchases)
+    $localDate: LocalDate() from LocalDate.now()
+    $purchasesInLastSixMonths: List() from accumulate(
+        $userPurchase: UserPurchase(purchaseDate.isAfter($localDate.minusMonths(6))) from $userPurchases,
+        collectList($userPurchase)
+    )
+then
+    HashMap<Author, Integer> authorMap = new HashMap<>();
+    List<UserPurchase> purchases = new ArrayList<>($purchasesInLastSixMonths);
+    for(UserPurchase purchase : purchases) {
+        if(authorMap.containsKey(purchase.getBook().getAuthor())){
+            authorMap.replace(purchase.getBook().getAuthor(), authorMap.get(purchase.getBook().getAuthor()) + 1);
+        }
+        else
+            authorMap.put(purchase.getBook().getAuthor(), 1);
+    }
+     for (HashMap.Entry<Author, Integer> set : authorMap.entrySet()) {
+        if(set.getValue() >= 3)
+            insert(set.getKey());
+     }
+end
+
+rule "Randomly Select 1adw0 Recommendations"
+when
+    $loggedInUser: LoggedInUser($userPurchases : purchases)
+    $localDate: LocalDate() from LocalDate.now()
+    $purchasesInLastSixMonths: List() from accumulate(
+        $userPurchase: UserPurchase(purchaseDate.isAfter($localDate.minusMonths(6))) from $userPurchases,
+        collectList($userPurchase)
+    )
+then
+    HashMap<Genre, Integer> authorMap = new HashMap<>();
+    List<UserPurchase> purchases = new ArrayList<>($purchasesInLastSixMonths);
+    for(UserPurchase purchase : purchases) {
+        if(authorMap.containsKey(purchase.getBook().getGenre())){
+            authorMap.replace(purchase.getBook().getGenre(), authorMap.get(purchase.getBook().getGenre()) + 1);
+        }
+        else
+            authorMap.put(purchase.getBook().getGenre(), 1);
+    }
+     for (HashMap.Entry<Genre, Integer> set : authorMap.entrySet()) {
+        if(set.getValue() / purchases.size()  > 0.3) {
+            GenreOfInterest genreOfInterest = new GenreOfInterest(set.getKey());
+            insert(genreOfInterest);
+        }
+     }
+end
+
+rule "Add Book Recommaaaaaaaadawdendation To List"
+when
+    $author: GenreOfInterest($genre: genre)
+    $book: Book(genre == $genre)
+then
+    insert(new RecommendedBook($book));
+end
+
+rule "Add Book Radecommadawdendation To List"
+when
+    $author: Author()
+    $book: Book(author.getId() == $author.getId())
+then
+    insert(new RecommendedBook($book));
+end
+
+
+rule "Add Book Recommendation To List"
+when
+    $recommendedBooks : RecommendedBookList()
+    $book: RecommendedBook()
+then
+    $recommendedBooks.addBookRecommendation($book);
+    System.out.println($recommendedBooks.getRecommendedBooks().size());
+end
+
+rule "Sort Book Recommendation List"
+when
+    $recommendedBooks : RecommendedBookList(recommendedBooks.size() > 20)
+then
+    $recommendedBooks.sortList();
+end
+
+
+/*
+rule "Remove Poorly-Rated Books if More Than 10 Recommendations"
+when
+    $book: RecommendedBook()
+    $recommendedList:  RecommendedBookList($recommendedBooks : recommendedBooks)
+    $count: Number(intValue > 0) from accumulate(
+        $b: RecommendedBook(id == $book.getId()) from $recommendedBooks,
+        count($b)
+    )
+then
+    List<RecommendedBook> recommendedBooks = new ArrayList<>($recommendedBooks);
+    for(RecommendedBook book : recommendedBooks) {
+        if(book.getId() == $book.getId()) {
+            book.setRecommendationPoints(book.getRecommendationPoints() + 1);
+        }
+    }
+    $recommendedList.setRecommendedBooks(recommendedBooks);
+    System.out.println($recommendedBooks.size() + "111") ;
+end
+
+rule "Remove Poorly-Rated Boaefoks if More Than 10 Recommendations"
+when
+    $book: RecommendedBook()
+    RecommendedBookList($recommendedBooks : recommendedBooks)
+    $count: Number(intValue == 0) from accumulate(
+        $b: RecommendedBook(id == $book.getId()) from $recommendedBooks,
+        count($b)
+    )
+then
+    $recommendedBooks.add($book);
+    System.out.println($recommendedBooks.size() + "!111111111");
+end*/

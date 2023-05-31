@@ -23,6 +23,6 @@ public class OrderItem {
     private double price;
     @Column
     private double discount;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Order order;
 }

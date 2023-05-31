@@ -16,7 +16,8 @@ import java.util.List;
 @Entity
 @Builder
 @Getter
-
+@Setter
+@ToString
 public class AppUser implements UserDetails {
 
 
@@ -33,6 +34,9 @@ public class AppUser implements UserDetails {
     private String lastName;
     @Column
     private Role role;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Rating> ratings;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

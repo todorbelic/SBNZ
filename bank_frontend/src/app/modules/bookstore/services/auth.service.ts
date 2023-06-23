@@ -8,7 +8,7 @@ import {Observable} from "rxjs";
 })
 export class AuthService {
 
-  apiHost: string = 'http://localhost:8082/';
+  apiHost: string = 'http://localhost:8083/';
   headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
   constructor(private http: HttpClient) { }

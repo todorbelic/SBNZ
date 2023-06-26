@@ -33,7 +33,15 @@ export class CartService {
 
   checkoutCard(userCartCard: UserCartCard) {
     this.http.post(this.purchaseBaseUrl + '/createPurchaseCard', userCartCard, { headers: this.headers }).subscribe(res => {
-      console.log(res);
+      alert("Successful");
+    }, error => {
+      if(error.status == 417) {
+        console.log("XD")
+        alert("Not enough funds");
+      } else {
+        console.log("ELSE")
+        alert("Something went wrong");
+      }
     });
   }
 }

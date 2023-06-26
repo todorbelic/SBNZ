@@ -58,7 +58,7 @@ export class CartComponent implements OnInit {
     this.getCartItems();
   }
 
-  checkout(): void {
+  public checkout(): void {
     const user = this.tokenStorageService.getUser();
     if(this.isCard == 'cash') {
       alert('Checkout successful');
@@ -68,7 +68,7 @@ export class CartComponent implements OnInit {
     } else if (this.isCard == 'card') {
       const userCardCart = new UserCartCard(Number(user.id), this.orderProcessed, this.address, this.card, 1);
       console.log(userCardCart)
-      this.cartService.checkoutCard(userCardCart)
+      this.cartService.checkoutCard(userCardCart);
       this.clearCart();
     }
 

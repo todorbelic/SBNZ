@@ -16,10 +16,10 @@ public class BankAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
+    @Column
+    private String accountNumber;
     @Column
     private Integer moneyBalance;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "payment_card_id", referencedColumnName = "id")
     private PaymentCard paymentCard;

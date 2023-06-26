@@ -21,5 +21,7 @@ public class PaymentCard {
     private LocalDate expirationDate;
     @Column
     private String cvcNumber;
+    @Column
+    private String cardNumber;
 
 }

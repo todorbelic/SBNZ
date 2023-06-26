@@ -7,6 +7,8 @@ import { Address } from '../../bookstore/dto/adress.model';
 import { UserCart } from '../../bookstore/dto/user-cart.model';
 import { TokenStorageService } from '../../bookstore/services/token-storage.service';
 import { ProcessedOrder } from '../../bookstore/dto/processed-order';
+import {Card} from "../../bookstore/dto/card.model";
+import {UserCartCard} from "../../bookstore/dto/user-cart-with-card.model";
 
 @Component({
   selector: 'app-cart',
@@ -17,11 +19,13 @@ export class CartComponent implements OnInit {
 
   cartItems: any[] = [];
   address: Address;
-  isCard: boolean = false;
+  card: Card;
+  isCard: string = '';
   orderProcessed!: any;
 
   constructor(public cartService: CartService, private tokenStorageService: TokenStorageService) {
     this.address = new Address();
+    this.card = new Card();
   }
 
   ngOnInit(): void {
@@ -55,12 +59,19 @@ export class CartComponent implements OnInit {
   }
 
   checkout(): void {
-    alert('Checkout successful');
     const user = this.tokenStorageService.getUser();
-    const userCart = new UserCart(Number(user.id), this.orderProcessed, this.address, 0);
+    if(this.isCard == 'cash') {
+      alert('Checkout successful');
+      const userCart = new UserCart(Number(user.id), this.orderProcessed, this.address, 0);
+      this.cartService.checkout(userCart)
+      this.clearCart();
+    } else if (this.isCard == 'card') {
+      const userCardCart = new UserCartCard(Number(user.id), this.orderProcessed, this.address, this.card, 1);
+      console.log(userCardCart)
+      this.cartService.checkoutCard(userCardCart)
+      this.clearCart();
+    }
 
-    this.cartService.checkout(userCart)
-    this.clearCart();
   }
 
   getRounded(disc: number): any {

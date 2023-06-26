@@ -6,6 +6,7 @@ import { UserCart } from '../dto/user-cart.model';
 import { Order } from '../dto/order';
 import { ProcessedOrder } from '../dto/processed-order';
 import { Observable } from 'rxjs';
+import {UserCartCard} from "../dto/user-cart-with-card.model";
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,12 @@ export class CartService {
 
   checkout(userCart: UserCart) {
     this.http.post(this.purchaseBaseUrl + '/createPurchase', userCart, { headers: this.headers }).subscribe(res => {
+      console.log(res);
+    });
+  }
+
+  checkoutCard(userCartCard: UserCartCard) {
+    this.http.post(this.purchaseBaseUrl + '/createPurchaseCard', userCartCard, { headers: this.headers }).subscribe(res => {
       console.log(res);
     });
   }

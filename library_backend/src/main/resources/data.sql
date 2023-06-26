@@ -289,7 +289,7 @@ VALUES (2.0, 11, 8);
 INSERT INTO rating (value, user_id, book_id)
 VALUES (3.0, 11, 9);
 INSERT INTO rating (value, user_id, book_id)
-VALUES (4.0, 11, 15);
+VALUES (3.0, 11, 15);
 INSERT INTO rating (value, user_id, book_id)
 VALUES (5.0, 11, 16);
 

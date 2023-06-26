@@ -30,5 +30,4 @@ public class PackageAccount {
     @JoinColumn(name = "bank_account_id", referencedColumnName = "id")
     private BankAccount bankAccount;
 
-
 }

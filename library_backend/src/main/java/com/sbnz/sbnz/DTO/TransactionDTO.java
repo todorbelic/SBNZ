@@ -4,14 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import java.time.LocalDate;
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
-public class Card {
+public class TransactionDTO {
     private String bankAccountNumber;
-    private String number;
-    private String cvc;
-    private String expirationDate;
+    private String ccvNumber;
+    private String cardNumber;
+    private double amount;
+    private LocalDate expirationDate;
 }

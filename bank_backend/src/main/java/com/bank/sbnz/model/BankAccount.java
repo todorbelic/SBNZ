@@ -19,11 +19,8 @@ public class BankAccount {
     @Column
     private String accountNumber;
     @Column
-    private Integer moneyBalance;
-    @OneToOne(cascade = CascadeType.ALL)
+    private double moneyBalance;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "payment_card_id", referencedColumnName = "id")
     private PaymentCard paymentCard;
-
-
-
 }

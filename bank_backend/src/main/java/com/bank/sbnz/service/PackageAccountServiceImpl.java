@@ -42,9 +42,11 @@ public class PackageAccountServiceImpl implements PackageAccountService{
         newPackageAccount.setType(type);
         BankAccount bankAccount = new BankAccount();
         bankAccount.setMoneyBalance(0);
+        bankAccount.setAccountNumber(generateRandomNumber(12));
         PaymentCard paymentCard = new PaymentCard();
-        paymentCard.setCvcNumber(generateRandomNumber());
+        paymentCard.setCvcNumber(generateRandomNumber(3));
         paymentCard.setExpirationDate(LocalDate.now().plusYears(5));
+        paymentCard.setCardNumber(generateRandomNumber(12));
         paymentCardRepository.save(paymentCard);
         bankAccount.setPaymentCard(paymentCard);
         bankAccountRepository.save(bankAccount);
@@ -53,10 +55,14 @@ public class PackageAccountServiceImpl implements PackageAccountService{
         return newPackageAccount;
     }
 
-    public static String generateRandomNumber() {
+    public static String generateRandomNumber(int length) {
         Random random = new Random();
-        int randomNumber = random.nextInt(1000); // Generates a random number between 0 and 999 (exclusive)
-        return String.format("%03d", randomNumber); // Formats the number as a three-digit string
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            int digit = random.nextInt(10); // Generates a random digit between 0 and 9
+            stringBuilder.append(digit);
+        }
+        return stringBuilder.toString();
     }
 
 

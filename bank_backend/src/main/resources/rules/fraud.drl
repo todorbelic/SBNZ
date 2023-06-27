@@ -1,0 +1,22 @@
+import com.bank.sbnz.events.MyEvent;
+import com.bank.sbnz.model.*;
+
+rule "Unusual Transaction Amount at Odd Hours"
+when
+    $transaction: Transaction(amount >= 10000)
+    $hour: Integer(intValue < 6 || intValue > 22) from $transaction.getDate().getHour()
+then
+    System.out.println("Unusual Transaction Amount at Odd Hours Detected: " + $transaction);
+end
+
+rule "Unusual Transaction Amount Compared to Customer's Average"
+when
+    $transaction: Transaction($amount: amount)
+    $average: Number(doubleValue > 0) from accumulate(
+        Transaction($cust: packageAccount.getAppUser(), amount != $amount),
+        average($cust, Transaction(amount))
+    )
+    eval(($average == null && $amount > 0) || ($average != null && $amount > $average.doubleValue() * 2))
+then
+    System.out.println("Unusual Transaction Amount Compared to Customer's Average Detected: " + $transaction);
+end

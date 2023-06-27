@@ -44,7 +44,7 @@ public class PurchaseController {
         String url = "http://localhost:8083/api/v1/transaction/save-transaction";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        TransactionDTO transactionDTO = new TransactionDTO(purchaseDTO.card.getBankAccountNumber(), purchaseDTO.card.getCvc(), purchaseDTO.card.getNumber(),
+        TransactionDTO transactionDTO = new TransactionDTO("2", purchaseDTO.card.getCvc(), purchaseDTO.card.getNumber(),
                                                            purchaseDTO.processedOrder.totalPrice, LocalDate.parse(purchaseDTO.card.getExpirationDate(), DateTimeFormatter.ISO_DATE));
         HttpEntity<TransactionDTO> requestEntity = new HttpEntity<>(transactionDTO, headers);
         RestTemplate restTemplate = new RestTemplate();

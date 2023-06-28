@@ -57,15 +57,12 @@ when
     eval(!$visitedCountries.contains($currentTransactionEvent.getTransaction().getCountry()))
 then
     System.out.println("Unknown country = " + $currentTransactionEvent.getTransaction().getCountry());
-    System.out.println("Visited = " + $visitedCountries);
-    System.out.println("Transactions = " + $transactions.size());
 end
 
 rule "Unusual Transaction Amount at Odd Hours"
 when
     $transaction: Transaction(amount >= 10000)
-    $e1: TransactionEvent()
-    $hour: Integer(intValue < 6 || intValue > 22) from $e1.getExecutionTime().getHours()
+    $hour: Integer(intValue < 6 || intValue > 22) from $transaction.getDate().getHour()
 then
     System.out.println("Unusual Transaction Amount at Odd Hours Detected: " + $transaction);
 end

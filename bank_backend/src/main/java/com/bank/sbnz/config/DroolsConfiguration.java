@@ -44,8 +44,6 @@ public class DroolsConfiguration {
 
         KieBase kieBase = kieContainer.newKieBase(kieBaseConfig);
         KieSession kieSession = kieBase.newKieSession(config, null);
-//        EntryPoint atmStream = kieSession.getEntryPoint("ATM Stream");
-//        atmStream.insert()
 
         return kieSession;
     }

@@ -65,5 +65,12 @@ public class PackageAccountServiceImpl implements PackageAccountService{
         return stringBuilder.toString();
     }
 
+    @Override
+    public List<PackageAccount> findAll() {
+        return packageAccountRepository.findAll();
+    }
+
+
+
 
 }

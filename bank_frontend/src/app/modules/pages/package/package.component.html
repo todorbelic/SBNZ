@@ -1,0 +1,17 @@
+<div class="containerbuttons">
+  <button class="btn btn-primary"  (click)="createSavingsPackage()">Create savings package</button>
+  <button class="btn btn-primary" (click)="createCheckingPackage()">Create checking package</button>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 mb-4" *ngFor="let b of packages">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Package type: {{b.type}}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Account number: {{b.bankAccount.accountNumber}}</h6>
+          <p class="card-text">Balance: {{b.bankAccount.moneyBalance}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,8 +1,13 @@
 package com.bank.sbnz.service;
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.util.Date;
 
 import com.bank.sbnz.DTO.TransactionDTO;
 import com.bank.sbnz.enums.TransactionStatus;
 import com.bank.sbnz.events.MyEvent;
+import com.bank.sbnz.events.TransactionEvent;
 import com.bank.sbnz.model.BankAccount;
 import com.bank.sbnz.model.PackageAccount;
 import com.bank.sbnz.model.PaymentCard;
@@ -17,8 +22,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import java.lang.module.FindException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
+import com.maxmind.geoip2.model.CityResponse;
+import com.maxmind.geoip2.record.Country;
+import com.maxmind.geoip2.record.Subdivision;
 
 @Service
 public class TransactionServiceImpl implements TransactionService{
@@ -46,7 +57,7 @@ public class TransactionServiceImpl implements TransactionService{
 
 
     @Override
-    public boolean saveTransaction(TransactionDTO transactionDTO) {
+    public boolean saveTransaction(TransactionDTO transactionDTO) throws IOException, GeoIp2Exception {
         Optional<PaymentCard> paymentCard = paymentCardRepository.findByCardNumber(transactionDTO.getCardNumber());
         Optional<BankAccount> bankAccount = bankAccountRepository.findByPaymentCard(paymentCard.get());
         Optional<PackageAccount> packageAccount = packageAccountRepository.findByBankAccount(bankAccount.get());
@@ -54,7 +65,13 @@ public class TransactionServiceImpl implements TransactionService{
             throw new RuntimeException(new FindException());
         }
         Transaction transaction = new Transaction(transactionDTO.getAmount(), LocalDateTime.now(), packageAccount.get());
+        String country = GetCountryFromIpAddress(transactionDTO);
+        transaction.setCountry(country);
+        TransactionEvent transactionEvent = new TransactionEvent(transaction);
+        transactionEvent.setExecutionTime(new Date());
         kieSession.insert(transaction);
+        kieSession.insert(transactionRepository.findAll());
+        kieSession.insert(transactionEvent);
         kieSession.fireAllRules();
         if(bankAccount.get().getMoneyBalance() - transaction.getAmount() >= 0) {
             bankAccount.get().setMoneyBalance(bankAccount.get().getMoneyBalance() - transaction.getAmount());
@@ -68,6 +85,13 @@ public class TransactionServiceImpl implements TransactionService{
 
         return false;
     }
+
+    private String GetCountryFromIpAddress(TransactionDTO transactionDTO) throws IOException, GeoIp2Exception {
+        String databasePath = "src/main/resources/ipdb/GeoLite2-City.mmdb";
+        DatabaseReader reader = new DatabaseReader.Builder(new File(databasePath)).build();
+        String ipAddress = transactionDTO.getIpAddress(); // Replace with the IP address you want to geolocate
+        return reader.country(InetAddress.getByName(ipAddress)).getCountry().getIsoCode();
+    };
 
     private boolean transactionCardDetailsValid(TransactionDTO transactionDTO, BankAccount bankAccount) {
         if(bankAccount == null) {

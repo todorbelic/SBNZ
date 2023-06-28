@@ -9,6 +9,8 @@ import { TokenStorageService } from '../../bookstore/services/token-storage.serv
 import { ProcessedOrder } from '../../bookstore/dto/processed-order';
 import {Card} from "../../bookstore/dto/card.model";
 import {UserCartCard} from "../../bookstore/dto/user-cart-with-card.model";
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-cart',
@@ -23,7 +25,7 @@ export class CartComponent implements OnInit {
   isCard: string = '';
   orderProcessed!: any;
 
-  constructor(public cartService: CartService, private tokenStorageService: TokenStorageService) {
+  constructor(public cartService: CartService, private tokenStorageService: TokenStorageService, private http: HttpClient) {
     this.address = new Address();
     this.card = new Card();
   }
@@ -66,10 +68,19 @@ export class CartComponent implements OnInit {
       this.cartService.checkout(userCart)
       this.clearCart();
     } else if (this.isCard == 'card') {
+      this.card.number = "123123123123"
+      this.card.expirationDate = "2025-01-01"
+      this.card.cvc = "323"
       const userCardCart = new UserCartCard(Number(user.id), this.orderProcessed, this.address, this.card, 1);
       console.log(userCardCart)
-      this.cartService.checkoutCard(userCardCart);
-      this.clearCart();
+      this.getIPAddress().subscribe((response: any) => {
+        const ipAddress = response.ip;
+        userCardCart.ipAddress = ipAddress;
+        userCardCart.ipAddress = "192.158.1.38"
+        console.log(userCardCart);
+        this.cartService.checkoutCard(userCardCart);
+        this.clearCart();
+      });
     }
 
   }
@@ -77,4 +88,8 @@ export class CartComponent implements OnInit {
   getRounded(disc: number): any {
     return (disc).toFixed(2);
   }
+  getIPAddress() {
+    return this.http.get('https://api.ipify.org/?format=json');
+  }
+
 }

@@ -21,7 +21,6 @@ public class DroolsConfiguration {
     private static final String drlFile2 = "rules/credit_approval.drl";
 
 
-
     @Bean
     public KieContainer kieContainer() {
         KieServices kieServices = KieServices.Factory.get();

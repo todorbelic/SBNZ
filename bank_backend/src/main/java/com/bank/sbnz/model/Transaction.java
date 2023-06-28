@@ -24,14 +24,14 @@ public class Transaction {
     @Column
     private LocalDateTime date;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "bank_account_id", referencedColumnName = "id")
-    private BankAccount bankAccount;
+    @JoinColumn(name = "package_account_id", referencedColumnName = "id")
+    private PackageAccount packageAccount;
     @Column
     private TransactionStatus transactionStatus;
 
-    public Transaction(double amount, LocalDateTime date, BankAccount bankAccount) {
+    public Transaction(double amount, LocalDateTime date, PackageAccount packageAccount) {
         this.amount = amount;
         this.date = date;
-        this.bankAccount = bankAccount;
+        this.packageAccount = packageAccount;
     }
 }

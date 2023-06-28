@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.lang.module.FindException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
@@ -70,6 +71,7 @@ public class TransactionServiceImpl implements TransactionService{
         TransactionEvent transactionEvent = new TransactionEvent(transaction);
         transactionEvent.setExecutionTime(new Date());
         kieSession.insert(transaction);
+        List<Transaction> transactions = transactionRepository.findAll();
         kieSession.insert(transactionRepository.findAll());
         kieSession.insert(transactionEvent);
         kieSession.fireAllRules();
@@ -87,7 +89,7 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
     private String GetCountryFromIpAddress(TransactionDTO transactionDTO) throws IOException, GeoIp2Exception {
-        String databasePath = "src/main/resources/ipdb/GeoLite2-City.mmdb";
+        String databasePath = "src/main/resources/ipdb/GeoLite2-Country.mmdb";
         DatabaseReader reader = new DatabaseReader.Builder(new File(databasePath)).build();
         String ipAddress = transactionDTO.getIpAddress(); // Replace with the IP address you want to geolocate
         return reader.country(InetAddress.getByName(ipAddress)).getCountry().getIsoCode();

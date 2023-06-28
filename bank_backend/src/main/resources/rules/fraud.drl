@@ -48,7 +48,8 @@ end
 rule "Unknown country transaction"
 when
     $currentTransactionEvent: TransactionEvent()
-    $transactions: List() from collect(Transaction(packageAccount.getAppUser() == $currentTransactionEvent.getTransaction().getPackageAccount().getAppUser()))
+    $transactions: List() from collect(Transaction(packageAccount.getAppUser() == $currentTransactionEvent.getTransaction().getPackageAccount().getAppUser()
+    && id != null))
     $visitedCountries: Set() from accumulate(
         t: Transaction() from $transactions,
         collectSet(t.getCountry())
@@ -56,6 +57,8 @@ when
     eval(!$visitedCountries.contains($currentTransactionEvent.getTransaction().getCountry()))
 then
     System.out.println("Unknown country = " + $currentTransactionEvent.getTransaction().getCountry());
+    System.out.println("Visited = " + $visitedCountries);
+    System.out.println("Transactions = " + $transactions.size());
 end
 
 rule "Unusual Transaction Amount at Odd Hours"

@@ -9,9 +9,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
-
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,6 +36,10 @@ public class AppUser implements UserDetails {
     private String lastName;
     @Column
     private Role role;
+    @Column
+    private LocalDate birthDate;
+    @Column
+    private int age;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

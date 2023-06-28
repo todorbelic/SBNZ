@@ -23,5 +23,4 @@ public class PaymentCard {
     private String cvcNumber;
     @Column
     private String cardNumber;
-
 }

@@ -39,4 +39,17 @@ public class CreditRequest {
     private double oneInstallmentAmount;
     @Column
     private LocalDate nextPaymentDate; //if approved
+    @Column
+    private boolean rbeApproval;
+    @Column
+    private int installmentsLeft;
+
+    public CreditRequest(EmploymentInfo employmentInfo, LocalDate maxPaymentDeadline, double oneInstallmentAmount, LocalDate minPaymentDeadline, int numOfInstallments, double totalAmount) {
+        this.employmentInfo = employmentInfo;
+        this.maxPaymentDeadline = maxPaymentDeadline;
+        this.oneInstallmentAmount = oneInstallmentAmount;
+        this.minPaymentDeadline = minPaymentDeadline;
+        this.numOfInstallments = numOfInstallments;
+        this.totalAmount = totalAmount;
+    }
 }

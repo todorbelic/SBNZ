@@ -1,6 +1,6 @@
 package com.bank.sbnz.enums;
 
 public enum Role {
-    USER,
-    ADMIN
+    CLIENT,
+    BANK_OFFICER
 }

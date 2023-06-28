@@ -1,0 +1,57 @@
+package rules;
+import com.bank.sbnz.model.*
+import com.bank.sbnz.enums.*
+
+rule "process credit request"
+    when
+        $creditRequest: CreditRequest()
+        isClientEligibleForCredit()
+    then
+        $creditRequest.setRbeApproval(true);
+end
+
+query isClientEligibleForCredit()
+    isClientEmployed()
+    doesCLientHaveStableIncome()
+    not isClientForLongTermCreditOfOldAge()
+    didClientPayPreviousCreditsRegularly()
+end
+
+query isClientForLongTermCreditOfOldAge()
+    CreditRequest(
+        client.age > 60,
+        numOfInstallments > 36
+    )
+end
+
+query isClientEmployed()
+    CreditRequest(
+        ((employmentInfo.employed == true) && (employmentInfo.indefinitely == true) && (employmentInfo.employmentStartDate < minPaymentDeadline)) ||
+        ((employmentInfo.employed == true) && (employmentInfo.indefinitely == false) && (employmentInfo.employmentStartDate < minPaymentDeadline) && (employmentInfo.employmentEndDate > maxPaymentDeadline))
+    )
+end
+
+query doesCLientHaveStableIncome()
+    $creditRequest: CreditRequest($clientCredits: client.creditRequests, $monthlyRate: oneInstallmentAmount)
+    Number(doubleValue() < 0.6 * $creditRequest.employmentInfo.monthlyIncome - $monthlyRate) from accumulate(
+        $c: CreditRequest(status == CreditRequestStatus.ONGOING) from $clientCredits,
+        sum($c.getOneInstallmentAmount())
+    )
+end
+
+query didClientPayPreviousCreditsRegularly()
+    $creditRequest: CreditRequest($clientCredits: client.creditRequests, $creditPayments: client.creditPayments)
+    Number($totalNumOfCreditPaymentDays: doubleValue()) from accumulate(
+        $c: CreditRequest((status == CreditRequestStatus.ONGOING) || (status == CreditRequestStatus.FINISHED)) from $clientCredits,
+        sum($c.getNumOfInstallments() * 30)
+    )
+    Number(doubleValue() < 0.05 * $totalNumOfCreditPaymentDays) from accumulate(
+        $c: CreditPayment() from $creditPayments,
+        sum($c.getDaysLate())
+    )
+end
+
+
+
+
+

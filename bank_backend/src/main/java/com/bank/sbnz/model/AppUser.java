@@ -40,6 +40,10 @@ public class AppUser implements UserDetails {
     private LocalDate birthDate;
     @Column
     private int age;
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<CreditRequest> creditRequests;
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<CreditPayment> creditPayments;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

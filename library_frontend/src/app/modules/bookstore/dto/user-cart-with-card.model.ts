@@ -8,6 +8,7 @@ export class UserCartCard {
   address: Address
   card: Card
   paymentMethod!: number
+  ipAddress!: string
 
   constructor(userId: number, processedOrder: any, address: Address, card: Card, paymentMethod: number) {
     this.userId = userId;

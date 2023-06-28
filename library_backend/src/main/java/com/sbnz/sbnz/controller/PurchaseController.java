@@ -45,7 +45,7 @@ public class PurchaseController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         TransactionDTO transactionDTO = new TransactionDTO("2", purchaseDTO.card.getCvc(), purchaseDTO.card.getNumber(),
-                                                           purchaseDTO.processedOrder.totalPrice, LocalDate.parse(purchaseDTO.card.getExpirationDate(), DateTimeFormatter.ISO_DATE));
+                                                           purchaseDTO.processedOrder.totalPrice, LocalDate.parse(purchaseDTO.card.getExpirationDate(), DateTimeFormatter.ISO_DATE), purchaseDTO.ipAddress);
         HttpEntity<TransactionDTO> requestEntity = new HttpEntity<>(transactionDTO, headers);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Void.class);

@@ -1,22 +1,85 @@
-import com.bank.sbnz.events.MyEvent;
+import com.bank.sbnz.events.TransactionEvent;
 import com.bank.sbnz.model.*;
+import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
+import java.time.LocalDate;
+import java.util.Set;
+import java.util.HashSet;
+
+
+rule "Insert Transactions"
+when
+    $transactions: List()
+    $transaction: Transaction() from $transactions
+then
+    insert($transaction);
+end
+
+declare TransactionEvent
+    @role(event)
+    @timestamp(executionTime)
+end
+
+rule "Big number of transactions in small time slot"
+when
+    $transactionEvents: List() from collect(TransactionEvent() over window:time(10h))
+    $count: Number(intValue>1) from accumulate(
+        $t: TransactionEvent() from $transactionEvents,
+        count($t)
+    )
+then
+    System.out.println("Big number of transactions = " + $count);
+end
+
+rule "Different country multiple transactions in small time slot"
+when
+    $transactionEvents: List(size > 1) from collect(TransactionEvent() over window:time(1h))
+    $unqiueCountries: Set(size > 1) from accumulate(
+        t: TransactionEvent() from $transactionEvents,
+        collectSet(t.getTransaction().getCountry())
+    )
+then
+    System.out.println("Total unique countries with multiple transactions within 1 hour: " + $unqiueCountries);
+end
+
+
+rule "Unknown country transaction"
+when
+    $currentTransactionEvent: TransactionEvent()
+    $transactions: List() from collect(Transaction(packageAccount.getAppUser() == $currentTransactionEvent.getTransaction().getPackageAccount().getAppUser()
+    && id != null))
+    $visitedCountries: Set() from accumulate(
+        t: Transaction() from $transactions,
+        collectSet(t.getCountry())
+    )
+    eval(!$visitedCountries.contains($currentTransactionEvent.getTransaction().getCountry()))
+then
+    System.out.println("Unknown country = " + $currentTransactionEvent.getTransaction().getCountry());
+    System.out.println("Visited = " + $visitedCountries);
+    System.out.println("Transactions = " + $transactions.size());
+end
 
 rule "Unusual Transaction Amount at Odd Hours"
 when
     $transaction: Transaction(amount >= 10000)
-    $hour: Integer(intValue < 6 || intValue > 22) from $transaction.getDate().getHour()
+    $e1: TransactionEvent()
+    $hour: Integer(intValue < 6 || intValue > 22) from $e1.getExecutionTime().getHours()
 then
     System.out.println("Unusual Transaction Amount at Odd Hours Detected: " + $transaction);
 end
 
 rule "Unusual Transaction Amount Compared to Customer's Average"
 when
-    $transaction: Transaction($amount: amount)
+    $transaction: Transaction($amount: amount, transactionStatus == null)
+    $transactions: List() from collect(Transaction(packageAccount.getAppUser() == $transaction.getPackageAccount().getAppUser()))
     $average: Number(doubleValue > 0) from accumulate(
-        Transaction($cust: packageAccount.getAppUser(), amount != $amount),
-        average($cust, Transaction(amount))
+        $t: Transaction() from $transactions,
+        average($t.getAmount())
     )
-    eval(($average == null && $amount > 0) || ($average != null && $amount > $average.doubleValue() * 2))
+    eval($amount > $average.doubleValue() * 1.5)
+
 then
     System.out.println("Unusual Transaction Amount Compared to Customer's Average Detected: " + $transaction);
 end

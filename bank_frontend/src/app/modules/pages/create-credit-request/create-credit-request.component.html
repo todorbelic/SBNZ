@@ -38,7 +38,7 @@
         </div>
         <div>
           <label for="employmentEndDate">Employment End Date:</label>
-          <input type="date" id="employmentEndDate" [(ngModel)]="loanApplication.employmentInfo.employmentEndDate" name="employmentEndDate" [disabled]="!loanApplication.employmentInfo.employed">
+          <input type="date" id="employmentEndDate" [(ngModel)]="loanApplication.employmentInfo.employmentEndDate" name="employmentEndDate" [disabled]="!loanApplication.employmentInfo.employed || loanApplication.employmentInfo.indefinitely">
         </div>
         <div>
           <label for="monthlyIncome">Monthly Income:</label>
@@ -47,8 +47,8 @@
       </div>   
       <button type="submit">Process</button>
     </form>
-    <button >Approve</button>
-    <button >Reject</button>
+    <button (click)="rejectCredit()" >Reject</button>
+    <button (click)="approveCredit()">Approve</button>
   </div>
   </body>
   

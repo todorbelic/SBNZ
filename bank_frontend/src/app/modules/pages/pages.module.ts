@@ -7,6 +7,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MaterialModule } from "../../material/material.module";
 import { CreateCreditRequestComponent } from './create-credit-request/create-credit-request.component';
+import { PackageComponent } from './package/package.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { CreateCreditRequestComponent } from './create-credit-request/create-cre
     HomeComponent,
     SignUpComponent,
     SignInComponent,
-    CreateCreditRequestComponent
+    CreateCreditRequestComponent,
+    PackageComponent
   ],
   imports: [
     CommonModule,

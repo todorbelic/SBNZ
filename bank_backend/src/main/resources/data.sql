@@ -20,6 +20,10 @@ INSERT INTO bank_account (account_number, money_balance, payment_card_id)
 VALUES ('2', 0, 2);
 INSERT INTO package_account (type, client_id, bank_account_id)
 VALUES (1, 1, 2);
+INSERT INTO transaction (amount, date, transaction_status, package_account_id, country)
+VALUES (700,'2023-06-27 18:39:51.031890',0,1, 'BH');
+INSERT INTO transaction (amount, date, transaction_status, package_account_id, country)
+VALUES (7440,'2023-06-27 18:39:35.944626',1,1, 'RS');
 
 
 ---STABILNA PRIMANJA----- #todor
@@ -41,7 +45,6 @@ VALUES (1, 10000, 200, 2, '{
   "employmentEndDate": "2023-06-30",
    "monthlyIncome": 2000.0
 }', 12, true, 2);
-
 
 ---NEREDOVNO PLACANJE----
 
@@ -67,7 +70,7 @@ INSERT INTO credit_payment(client_id, amount, days_late, payment_date)
 VALUES (3, 100, 18, '2021-01-01');
 
 INSERT INTO credit_payment(client_id, amount, days_late, payment_date)
-VALUES (3, 100, 18, '2021-02-01');
+VALUES (3, 100, 19, '2021-02-01');
 
 
 

@@ -49,9 +49,5 @@ public class DroolsConfiguration {
         return kieSession;
     }
 
-    @Bean // Specify the bean name
-    public EntryPoint myEventStream(KieSession kieSession) {
-        return kieSession.getEntryPoint("MyEventStream"); // Specify the entry point name
-    }
 
 }

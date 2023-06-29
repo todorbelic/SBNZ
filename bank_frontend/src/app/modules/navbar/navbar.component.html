@@ -5,6 +5,7 @@
       <a href="">Home</a>
       <a *ngIf="isBanker" href="/credit-request">Credit Request</a>
       <a href="/books">Add Something</a>
+      <a *ngIf="isLoggedIn" href="/packages">Package accounts</a>
       <a href="#">Add Something</a>
       <button class="btnLogin-popup" *ngIf="!isLoggedIn" (click)="routeToSignUp()">Sign up</button>
       <button class="btnLogin-popup" *ngIf="!isLoggedIn" (click)="routeToSignIn()">Sign in</button>

@@ -1,6 +1,7 @@
 package com.bank.sbnz.controller;
 
 import com.bank.sbnz.DTO.CreditRequestDTO;
+import com.bank.sbnz.DTO.CreditRequestProcessedDTO;
 import com.bank.sbnz.DTO.TransactionDTO;
 import com.bank.sbnz.service.CreditService;
 import com.bank.sbnz.service.TransactionService;
@@ -22,10 +23,30 @@ public class CreditController {
     }
 
     @PostMapping(value = "/credit-request-processing")
-    public ResponseEntity<Boolean> processCreditRequest(@RequestBody CreditRequestDTO creditRequestDTO) {
+    public ResponseEntity<CreditRequestProcessedDTO> processCreditRequest(@RequestBody CreditRequestDTO creditRequestDTO) {
         try{
-            boolean transactionValid = creditService.shouldApproveCredit(creditRequestDTO);
+            CreditRequestProcessedDTO transactionValid = creditService.shouldApproveCredit(creditRequestDTO);
             return new ResponseEntity<>(transactionValid, HttpStatus.OK);
+        }catch (Exception ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value = "/credit-request-approval/{id}")
+    public ResponseEntity approveCreditRequest(@PathVariable Long id) {
+        try{
+            creditService.ApproveCredit(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value = "/credit-request-rejection/{id}")
+    public ResponseEntity rejectCreditRequest(@PathVariable Long id) {
+        try{
+            creditService.RejectCredit(id);
+            return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -41,9 +42,9 @@ public class AppUser implements UserDetails {
     @Column
     private int age;
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<CreditRequest> creditRequests;
+    private List<CreditRequest> creditRequests = new ArrayList<>();
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<CreditPayment> creditPayments;
+    private List<CreditPayment> creditPayments = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

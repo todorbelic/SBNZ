@@ -15,4 +15,5 @@ public class TransactionDTO {
     private String cardNumber;
     private double amount;
     private LocalDate expirationDate;
+    private String ipAddress;
 }

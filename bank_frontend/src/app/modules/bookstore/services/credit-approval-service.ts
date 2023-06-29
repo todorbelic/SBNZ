@@ -18,4 +18,12 @@ export class CreditApprovalService {
     return this.http.post<any>(this.apiHost + 'api/v1/credit/credit-request-processing', request, {headers: this.headers});
   }
 
+  rejectRequest(id: any): Observable<any> {
+    return this.http.post<any>(this.apiHost + 'api/v1/credit/credit-request-rejection/'+ id , {headers: this.headers});
+  }
+
+  approveRequest(id: any): Observable<any> {
+    return this.http.post<any>(this.apiHost + 'api/v1/credit/credit-request-approval/' + id, {headers: this.headers});
+  }
+
 }

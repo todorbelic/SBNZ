@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DroolsConfiguration {
     private static final String drlFile = "rules/fraud.drl";
-
+    private static final String drlFile2 = "rules/credit_approval.drl";
 
 
     @Bean
@@ -27,6 +27,7 @@ public class DroolsConfiguration {
 
         KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
         kieFileSystem.write(ResourceFactory.newClassPathResource(drlFile));
+        kieFileSystem.write(ResourceFactory.newClassPathResource(drlFile2));
         KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem);
         kieBuilder.buildAll();
         KieModule kieModule = kieBuilder.getKieModule();

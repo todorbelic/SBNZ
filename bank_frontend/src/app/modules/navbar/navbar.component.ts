@@ -13,10 +13,13 @@ export class NavbarComponent implements OnInit {
   user: UserToken;
   role: any;
   isLoggedIn: boolean = false;
+  isBanker: boolean = false;
 
   constructor(private tokenStorageService: TokenStorageService, private router: Router) {
     this.user = this.tokenStorageService.getUser()
     this.isLoggedIn = this.tokenStorageService.isLoggedIn()
+    console.log(this.user.role)
+    this.isBanker = this.user.role == 'BANK_OFFICER';
   }
 
   ngOnInit(): void {

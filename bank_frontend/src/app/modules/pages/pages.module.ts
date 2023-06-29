@@ -6,6 +6,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MaterialModule } from "../../material/material.module";
+import { CreateCreditRequestComponent } from './create-credit-request/create-credit-request.component';
 import { PackageComponent } from './package/package.component';
 
 
@@ -14,6 +15,7 @@ import { PackageComponent } from './package/package.component';
     HomeComponent,
     SignUpComponent,
     SignInComponent,
+    CreateCreditRequestComponent,
     PackageComponent
   ],
   imports: [

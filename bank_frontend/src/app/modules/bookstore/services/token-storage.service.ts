@@ -42,6 +42,6 @@ export class TokenStorageService {
       //console.log(window.sessionStorage.getItem(USER_KEY))
       return JSON.parse(user);
     }
-    return new UserToken("", "",0);
+    return new UserToken("", "", "");
   }
 }

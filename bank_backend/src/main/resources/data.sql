@@ -1,7 +1,13 @@
-INSERT INTO app_user (username, role, password)
-VALUES ('todor', 0,'$2a$10$c9ANL2IaV0RNMiwN0PKfSOqozojOQDXtxSDXjXggxpyyCfek9YmVG');
-INSERT INTO app_user (username, role, password)
-VALUES ('aleksa', 0 , '$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC');
+INSERT INTO app_user (username, role, password, age)
+VALUES ('todor', 0,'$2a$10$c9ANL2IaV0RNMiwN0PKfSOqozojOQDXtxSDXjXggxpyyCfek9YmVG', 32);
+INSERT INTO app_user (username, role, password, age)
+VALUES ('aleksa', 0 , '$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC', 65);
+INSERT INTO app_user (username, role, password, age)
+VALUES ('boban', 0 , '$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC', 27);
+INSERT INTO app_user (username, role, password, age)
+VALUES ('darko', 0 , '$2a$12$KYZWwLM7cbcVm5KZj.HwmOBq4SgX6GuslgQ8FAFbEqxPs2t0zpnwC', 27);
+INSERT INTO app_user (username, role, password, age)
+VALUES ('bankofficer', 1,'$2a$10$c9ANL2IaV0RNMiwN0PKfSOqozojOQDXtxSDXjXggxpyyCfek9YmVG', 32);
 INSERT INTO payment_card (cvc_number, expiration_date, card_number)
 VALUES ('323', '2025-01-01', '123123123123');
 INSERT INTO bank_account (account_number, money_balance, payment_card_id)
@@ -18,6 +24,53 @@ INSERT INTO transaction (amount, date, transaction_status, package_account_id, c
 VALUES (700,'2023-06-27 18:39:51.031890',0,1, 'BH');
 INSERT INTO transaction (amount, date, transaction_status, package_account_id, country)
 VALUES (7440,'2023-06-27 18:39:35.944626',1,1, 'RS');
+
+
+---STABILNA PRIMANJA----- #todor
+
+INSERT INTO credit_request(client_id, total_amount, one_installment_amount, status, employment_info, num_of_installments, rbe_approval, installments_left)
+VALUES (1, 10000, 100, 2, '{
+  "employed": true,
+  "indefinitely": true,
+  "employmentStartDate": "2021-01-01",
+  "employmentEndDate": "2023-06-30",
+   "monthlyIncome": 2000.0
+}', 12, true, 7);
+
+INSERT INTO credit_request(client_id, total_amount, one_installment_amount, status, employment_info, num_of_installments, rbe_approval, installments_left)
+VALUES (1, 10000, 200, 2, '{
+  "employed": true,
+  "indefinitely": true,
+  "employmentStartDate": "2021-01-01",
+  "employmentEndDate": "2023-06-30",
+   "monthlyIncome": 2000.0
+}', 12, true, 2);
+
+---NEREDOVNO PLACANJE----
+
+INSERT INTO credit_request(client_id, total_amount, one_installment_amount, status, employment_info, num_of_installments, rbe_approval, installments_left)
+VALUES (3, 10000, 100, 2, '{
+  "employed": true,
+  "indefinitely": true,
+  "employmentStartDate": "2021-01-01",
+  "employmentEndDate": "2023-06-30",
+   "monthlyIncome": 2000.0
+}', 12, true, 7);
+
+INSERT INTO credit_request(client_id, total_amount, one_installment_amount, status, employment_info, num_of_installments, rbe_approval, installments_left)
+VALUES (3, 10000, 500, 2, '{
+  "employed": true,
+  "indefinitely": true,
+  "employmentStartDate": "2021-01-01",
+  "employmentEndDate": "2023-06-30",
+   "monthlyIncome": 2000.0
+}', 12, true, 2);
+
+INSERT INTO credit_payment(client_id, amount, days_late, payment_date)
+VALUES (3, 100, 18, '2021-01-01');
+
+INSERT INTO credit_payment(client_id, amount, days_late, payment_date)
+VALUES (3, 100, 19, '2021-02-01');
 
 
 

@@ -29,7 +29,7 @@ class CEPRulesTest {
     @Autowired
     public CEPRulesTest(KieSession kieSession){
         this.kieSession = kieSession;
-        this.testAppUser = new AppUser(1l, "username", "12312", "first", "last", Role.USER);
+        this.testAppUser = new AppUser(1l, "username", "12312", "first", "last", Role.USER, LocalDate.now(), 33, null, null);
         this.testPaymentCard = new PaymentCard(1l, LocalDate.now().plusYears(1), "130", "123123123123");
         this.testBankAccount = new BankAccount(1l, "1", 1000, this.testPaymentCard);
         this.testPackageAccount = new PackageAccount(1l, PackageAccountType.CHECKING, this.testAppUser, this.testBankAccount);

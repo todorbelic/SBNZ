@@ -84,7 +84,6 @@ public class TransactionServiceImpl implements TransactionService{
         }
         transaction.setTransactionStatus(TransactionStatus.REJECTED);
         transactionRepository.save(transaction);
-
         return false;
     }
 

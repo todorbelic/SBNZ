@@ -1,0 +1,54 @@
+<body>
+<div class="container">
+    <h2>Loan Application Form</h2>
+    <form (submit)="submitForm()">
+      <div>
+        <label for="clientUsername">Client Username:</label>
+        <input type="text" id="clientUsername" [(ngModel)]="loanApplication.clientUsername" name="clientUsername" required>
+      </div>
+      <div>
+        <label for="totalAmount">Total Amount:</label>
+        <input type="number" id="totalAmount" [(ngModel)]="loanApplication.totalAmount" name="totalAmount" required>
+      </div>
+      <div>
+        <label for="minPaymentDeadline">Minimum Payment Deadline:</label>
+        <input type="date" id="minPaymentDeadline" [(ngModel)]="loanApplication.minPaymentDeadline" name="minPaymentDeadline" required>
+      </div>
+      <div>
+        <label for="maxPaymentDeadline">Maximum Payment Deadline:</label>
+        <input type="date" id="maxPaymentDeadline" [(ngModel)]="loanApplication.maxPaymentDeadline" name="maxPaymentDeadline" required>
+      </div>
+      <div>
+        <label for="numOfInstallments">Number of Installments:</label>
+        <input type="number" id="numOfInstallments" [(ngModel)]="loanApplication.numOfInstallments" name="numOfInstallments" required>
+      </div>
+      <div>
+        <h3>Employment Information</h3>
+        <div>
+          <label for="employed">Employed:</label>
+          <input type="checkbox" id="employed" [(ngModel)]="loanApplication.employmentInfo.employed" name="employed">
+        </div>
+        <div>
+          <label for="indefinitely">Indefinitely Employed:</label>
+          <input type="checkbox" id="indefinitely" [(ngModel)]="loanApplication.employmentInfo.indefinitely" name="indefinitely">
+        </div>
+        <div>
+          <label for="employmentStartDate">Employment Start Date:</label>
+          <input type="date" id="employmentStartDate" [(ngModel)]="loanApplication.employmentInfo.employmentStartDate" name="employmentStartDate" [disabled]="!loanApplication.employmentInfo.employed" required>
+        </div>
+        <div>
+          <label for="employmentEndDate">Employment End Date:</label>
+          <input type="date" id="employmentEndDate" [(ngModel)]="loanApplication.employmentInfo.employmentEndDate" name="employmentEndDate" [disabled]="!loanApplication.employmentInfo.employed || loanApplication.employmentInfo.indefinitely">
+        </div>
+        <div>
+          <label for="monthlyIncome">Monthly Income:</label>
+          <input type="number" id="monthlyIncome" [(ngModel)]="loanApplication.employmentInfo.monthlyIncome" name="monthlyIncome" [disabled]="!loanApplication.employmentInfo.employed" required>
+        </div>
+      </div>   
+      <button type="submit">Process</button>
+    </form>
+    <button (click)="rejectCredit()" >Reject</button>
+    <button (click)="approveCredit()">Approve</button>
+  </div>
+  </body>
+  
